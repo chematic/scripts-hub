@@ -2,296 +2,108 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#05060a">
-<meta name="description" content="Azuno dashboard.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06070c">
+<meta name="description" content="Azuno creator dashboard.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Azuno | Dashboard">
-<meta property="og:description" content="Manage your script cards and creator access.">
-<meta property="og:image" content="assets/og-card.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Azuno | Dashboard">
-<meta name="twitter:description" content="Manage your script cards and creator access.">
-<meta name="twitter:image" content="assets/og-card.png">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https://azuscripts-api.zizicacadelafrance.workers.dev; font-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta property="og:description" content="Manage your Azuno script cards.">
+<meta property="og:url" content="https://chematic.github.io/scripts-hub/admin.html">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="styles.css?v=20260921-3">
+<link rel="stylesheet" href="styles.css?v=20260921-7">
 <title>Azuno | Dashboard</title>
 </head>
 <body class="admin-body">
-<div class="ambient ambient-a"></div>
-<div class="ambient ambient-b"></div>
-<div class="grid"></div>
-<div class="noise"></div>
+  <div class="bg-layer bg-glow-one"></div><div class="bg-layer bg-glow-two"></div><div class="bg-grid"></div><div class="bg-noise"></div>
 
-<header class="topbar">
-  <div class="topbar-inner shell">
-    <a class="brand-wordmark" href="index.html" aria-label="Azuno hub">
-      <strong>AZUNO</strong>
-      <span>script hub</span>
-    </a>
-  <div class="topbar-right">
-    <span class="session-chip" id="sessionChip">Signed out</span>
-    <a class="header-btn" href="index.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 4 8 7v8H4v-8l8-7Z"/><path d="M9 19v-5h6v5"/></svg>
-      Hub
-    </a>
-    <button class="header-btn danger-link hidden" id="logoutBtn" type="button">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5v14h5"/><path d="M13 8l4 4-4 4M8 12h9"/></svg>
-      Sign out
-    </button>
+  <header class="site-header admin-header">
+    <div class="header-shell">
+      <a class="wordmark" href="index.html"><span class="wordmark-name">Azuno</span><span class="wordmark-sub">dashboard</span></a>
+      <div class="admin-header-actions"><span class="session-chip" id="sessionChip">Signed out</span><a class="header-dashboard secondary" href="index.html">Hub</a><button class="header-dashboard danger hidden" id="logoutBtn" type="button">Sign out</button></div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="shell admin-main">
-  <section id="loginView" class="auth-layout">
-    <div class="glass-panel auth-card login-card">
-      <div class="eyebrow">DASHBOARD</div>
-      <h1>Sign in</h1>
-      <p class="auth-note">Use your User ID and HWID.</p>
-
-      <form id="loginForm">
-        <label>User ID
-          <input id="loginUser" autocomplete="username" maxlength="64" placeholder="azuno" required>
-        </label>
-        <label>HWID
-          <input id="loginHwid" autocomplete="off" inputmode="text" minlength="64" maxlength="64" placeholder="64-character fingerprint" required>
-        </label>
-        <div class="form-actions">
-          <button class="button primary" type="submit">
-            Sign in
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-          </button>
-          <button class="button ghost" type="button" id="getHwidCommand">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7h10v13H8z"/><path d="M5 17V4h10"/></svg>
-            Copy HWID command
-          </button>
+  <main class="dashboard-shell">
+    <section id="loginView" class="login-view">
+      <div class="login-grid">
+        <div class="login-copy">
+          <div class="section-kicker">DASHBOARD</div>
+          <h1>Build your<br><span>next drop.</span></h1>
+          <p>Manage cards, devices, access, and creator settings from one place.</p>
         </div>
-      </form>
-      <div id="loginStatus" class="status"></div>
-
-      <div class="discord-card">
-        <div class="discord-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M7.1 6.6A16 16 0 0 1 12 5.9c1.7 0 3.3.25 4.9.7l-.4 1.1c1.3.7 2.3 1.8 2.9 3.1.5 1.1.7 2.4.6 3.7-.1 1.4-.5 2.7-1.2 3.9A17.7 17.7 0 0 1 14.9 20l-1.2-1.7c.5-.2 1-.5 1.4-.8-1.9.7-4 .7-6 .1.4.3.9.6 1.4.8L9.3 20a17.5 17.5 0 0 1-3.9-1.5c-.8-1.2-1.2-2.5-1.3-3.9-.1-1.4.1-2.6.6-3.8.6-1.3 1.6-2.4 2.9-3.1Z"/><circle cx="9" cy="12.9" r="1.25"/><circle cx="15" cy="12.9" r="1.25"/></svg>
-        </div>
-        <div class="discord-copy">
-          <strong>Post your script</strong>
-          <span>Earn with your scripts and get your work on the hub.</span>
-          <b>Message <em>@vhb7</em></b>
-        </div>
-        <button id="copyDiscord" class="discord-copy-btn" type="button">Copy @vhb7</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="consoleView" class="hidden">
-    <div class="console-head">
-      <div>
-        <div class="eyebrow">DASHBOARD</div>
-        <h1 id="welcomeTitle">Welcome</h1>
-        <div class="admin-subline">
-          <span id="roleLine">admin</span>
-          <span class="dot"></span>
-          <span id="deviceLine">Device</span>
+        <div class="login-side">
+          <div class="panel-card login-card">
+            <div class="panel-top"><div><span class="panel-kicker">SIGN IN</span><h2>Welcome back.</h2></div><div class="panel-icon"><svg viewBox="0 0 24 24"><path d="M12 4v10M7 10l5 5 5-5"/><path d="M5 19h14"/></svg></div></div>
+            <form id="loginForm" class="login-form">
+              <label>User ID<input id="loginUser" autocomplete="username" maxlength="64" placeholder="azuno" required></label>
+              <label>HWID<input id="loginHwid" autocomplete="off" inputmode="text" minlength="64" maxlength="64" placeholder="64 character fingerprint" required></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Sign in <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button><button class="button button-secondary" type="button" id="getHwidCommand">Copy HWID command</button></div>
+            </form>
+            <div id="loginStatus" class="status"></div>
+          </div>
+          <div class="panel-card creator-pitch"><div class="discord-mark"><svg viewBox="0 0 24 24"><path d="M8.1 6.2A16.3 16.3 0 0 1 12 5.7c1.3 0 2.6.2 3.9.5"/><path d="M7.2 8.1C8.5 7.4 10.2 7 12 7s3.5.4 4.8 1.1c1.3 2 2 4.2 2.2 6.5a14.3 14.3 0 0 1-3.6 2.1l-.8-1.2M16.8 8.1c-1.3-.7-3-1.1-4.8-1.1s-3.5.4-4.8 1.1C5.9 10 5.2 12.2 5 14.6a14.3 14.3 0 0 0 3.6 2.1l.8-1.2"/><circle cx="9.5" cy="12.1" r="1.2"/><circle cx="14.5" cy="12.1" r="1.2"/></svg></div><div><strong>Post your script</strong><p>Earn with your work and get a custom Azuno card.</p></div><button id="copyLoginDiscord" class="icon-copy-btn" type="button" aria-label="Copy @vhb7"><svg viewBox="0 0 24 24"><path d="M8 8h10v10H8z"/><path d="M6 16H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
         </div>
       </div>
-      <div class="console-actions">
-        <button id="newCardBtn" class="button primary" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          New card
-        </button>
-      </div>
-    </div>
+    </section>
 
-    <div class="metrics">
-      <div class="glass-panel metric"><span>CARDS</span><strong id="metricCards">0</strong></div>
-      <div class="glass-panel metric"><span>TODAY</span><strong id="metricToday">0</strong></div>
-      <div class="glass-panel metric"><span>USERS</span><strong id="metricUsers">0</strong></div>
-      <div class="glass-panel metric"><span>DEVICES</span><strong id="metricDevices">0</strong></div>
-    </div>
+    <section id="consoleView" class="hidden">
+      <div class="dashboard-heading"><div><div class="section-kicker">DASHBOARD</div><h1 id="welcomeTitle">Welcome</h1><div class="account-line"><span class="role-pill" id="roleLine">admin</span><span id="deviceLine">Device</span></div></div><div class="dashboard-heading-actions"><button id="newCardBtn" class="button button-primary" type="button">New card <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
 
-    <div class="admin-layout">
-      <section class="glass-panel panel cards-panel">
-        <div class="panel-head">
-          <div><div class="eyebrow">LIBRARY</div><h2>Cards</h2></div>
-          <span id="adminResultCount">0</span>
-        </div>
-        <div class="panel-toolbar">
-          <label class="search compact-search">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg>
-            <input id="adminCardSearch" type="search" placeholder="Search cards" autocomplete="off">
-          </label>
-          <button class="small-button icon-text" id="refreshBtn" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.35-5.65"/><path d="M20 5v5h-5"/></svg>
-            Refresh
-          </button>
-        </div>
-        <div id="adminCards" class="admin-cards"></div>
-        <div id="adminEmpty" class="empty hidden"><strong>No cards yet.</strong><span>Create your first card on the right.</span></div>
-      </section>
+      <div class="metric-grid"><div class="metric-card"><span>Cards</span><strong id="metricCards">0</strong><small>Your library</small></div><div class="metric-card"><span>Today</span><strong id="metricToday">∞</strong><small id="quotaText">Unlimited</small></div><div class="metric-card"><span>Users</span><strong id="metricUsers">0</strong><small>Active accounts</small></div><div class="metric-card"><span>Devices</span><strong id="metricDevices">0</strong><small>Authorized</small></div></div>
 
-      <section class="glass-panel panel editor-panel" id="editorPanel">
-        <div class="panel-head">
-          <div><div class="eyebrow">EDITOR</div><h2 id="editorTitle">New card</h2></div>
-          <span id="quotaText">Unlimited</span>
-        </div>
+      <div class="workspace-grid">
+        <section class="panel-card library-panel">
+          <div class="panel-top"><div><span class="panel-kicker">LIBRARY</span><h2>Cards</h2></div><div class="panel-count" id="adminResultCount">0</div></div>
+          <div class="panel-toolbar"><label class="search-box compact"><span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></span><input id="adminCardSearch" type="search" placeholder="Search cards"></label><button class="button button-secondary small" id="refreshBtn" type="button"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-13.7-5.6L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 13.7 5.6L20 16"/><path d="M20 20v-4h-4"/></svg>Refresh</button></div>
+          <div id="adminCards" class="admin-card-list"></div>
+          <div id="adminEmpty" class="empty-state small hidden"><strong>No cards yet.</strong><span>Create your first card.</span></div>
+        </section>
 
-        <form id="cardForm">
-          <input type="hidden" id="cardId">
-
-          <div class="form-grid">
-            <label>Title
-              <input id="cardTitle" maxlength="80" required placeholder="Anime Ability Arena">
-            </label>
-            <label>Game
-              <input id="cardGame" maxlength="80" required placeholder="Anime Ability Arena">
-            </label>
-            <label>Category
-              <select id="cardCategory">
-                <option value="Combat">Combat</option>
-                <option value="Utility">Utility</option>
-                <option value="Automation">Automation</option>
-                <option value="Simulation">Simulation</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            <label>Version
-              <input id="cardVersion" maxlength="24" placeholder="V1.0">
-            </label>
-            <label>Status
-              <select id="cardStatus">
-                <option value="Live">Live</option>
-                <option value="Updated">Updated</option>
-                <option value="Beta">Beta</option>
-                <option value="Offline">Offline</option>
-              </select>
-            </label>
-            <label class="wide">Description
-              <textarea id="cardDescription" maxlength="500" rows="4" required placeholder="Auto Kill, farming, utilities..."></textarea>
-            </label>
-            <label class="wide">Thumbnail
-              <input id="cardImage" maxlength="800" placeholder="https://… or assets/image.png">
-            </label>
-            <label class="wide">Get link
-              <input id="cardRedirect" maxlength="800" placeholder="https://work.ink/…" required>
-            </label>
-            <label class="wide">Tags
-              <span class="muted">comma separated</span>
-              <input id="cardTags" maxlength="300" placeholder="Auto Kill, Anti Void">
-            </label>
-          </div>
-
-          <div id="featuredWrap" class="check-row hidden">
-            <label class="check-label"><input id="cardFeatured" type="checkbox"><span>Featured</span></label>
-          </div>
-
-          <div class="style-editor">
-            <div class="style-section">
-              <div class="label-title">Card gradient</div>
-              <div id="gradientChoices" class="gradient-choices"></div>
+        <section class="panel-card editor-panel" id="editorPanel">
+          <div class="panel-top"><div><span class="panel-kicker">EDITOR</span><h2 id="editorTitle">New card</h2></div><span id="quotaTextTop" class="editor-quota">Ready</span></div>
+          <form id="cardForm" class="editor-form">
+            <input type="hidden" id="cardId">
+            <div class="form-grid two-col">
+              <label>Title<input id="cardTitle" maxlength="80" required placeholder="Anime Ability Arena"></label>
+              <label>Game<input id="cardGame" maxlength="80" required placeholder="Anime Ability Arena"></label>
+              <label>Category<select id="cardCategory"><option value="Combat">Combat</option><option value="Utility">Utility</option><option value="Automation">Automation</option><option value="Simulation">Simulation</option><option value="Other">Other</option></select></label>
+              <label>Version<input id="cardVersion" maxlength="24" placeholder="V1.0"></label>
+              <label>Status<select id="cardStatus"><option value="Live">Live</option><option value="Updated">Updated</option><option value="Beta">Beta</option><option value="Offline">Offline</option></select></label>
+              <label>Tags <span class="field-note">comma separated</span><input id="cardTags" maxlength="300" placeholder="Auto Kill, Anti Void"></label>
             </div>
-            <div class="accent-editor">
-              <div class="label-title">Accent</div>
-              <div class="accent-pickers">
-                <label class="swatch-input"><span>Start</span><input id="cardAccentStart" class="color-input" type="color" value="#6b7cff"></label>
-                <span class="accent-arrow">→</span>
-                <label class="swatch-input"><span>End</span><input id="cardAccentEnd" class="color-input" type="color" value="#9a5eff"></label>
-              </div>
-              <div id="accentPreview" class="accent-preview"></div>
-            </div>
-          </div>
+            <label>Description<textarea id="cardDescription" maxlength="500" rows="4" required placeholder="Describe the script in one or two lines."></textarea></label>
+            <label>Thumbnail<input id="cardImage" maxlength="800" placeholder="https://... or assets/image.png"></label>
+            <label>Get link<input id="cardRedirect" maxlength="800" placeholder="https://work.ink/..." required></label>
 
-          <div class="live-preview">
-            <div class="preview-label">PREVIEW</div>
-            <article id="previewCard" class="script-card compact tilt-card" data-tilt-strength="3">
-              <div class="card-media">
-                <img id="previewImage" alt="">
-                <div class="card-shine"></div>
-              </div>
-              <div class="card-content">
-                <div class="card-meta-line">
-                  <span class="card-game" id="previewGame">Game</span>
-                  <span class="category-pill" id="previewCategory">Combat</span>
-                </div>
-                <div class="card-top">
-                  <span id="previewStatus" class="mini-badge">LIVE</span>
-                  <span id="previewVersion" class="version">V1.0</span>
-                </div>
-                <h3 id="previewTitle">Card title</h3>
-                <p id="previewDescription">Description</p>
-                <div id="previewTags" class="card-tags"></div>
-                <div class="card-footer">
-                  <span class="status-label"><i></i><span id="previewFooterStatus">Live</span></span>
-                  <span class="preview-owner">AZUNO</span>
-                </div>
-              </div>
-            </article>
-          </div>
+            <div id="featuredWrap" class="featured-toggle hidden"><label class="switch-row"><input id="cardFeatured" type="checkbox"><span class="switch"><i></i></span><span>Featured card</span></label></div>
 
-          <div class="form-actions">
-            <button class="button primary" type="submit">Save card</button>
-            <button class="button ghost" type="button" id="cancelEdit">Cancel</button>
-            <button class="button danger hidden" type="button" id="deleteCardBtn">Delete</button>
-          </div>
-          <div id="formStatus" class="status"></div>
-        </form>
-      </section>
-    </div>
+            <div class="style-row">
+              <div class="style-group"><div class="style-label">Gradient</div><div id="gradientChoices" class="gradient-choices"></div></div>
+              <div class="style-group accent-group"><div class="style-label">Accent</div><div class="dual-color-row"><label class="color-field"><span>Start</span><input id="cardAccent" class="color-input" type="color" value="#6b7cff"></label><label class="color-field"><span>End</span><input id="cardAccentEnd" class="color-input" type="color" value="#9a5eff"></label></div></div>
+            </div>
 
-    <section id="adminTools" class="hidden admin-tools-stack">
-      <div class="admin-tools-grid new-admin-grid">
-        <section class="glass-panel panel">
-          <div class="panel-head"><div><div class="eyebrow">ACCESS</div><h2>Add device</h2></div></div>
-          <form id="deviceForm">
-            <label>User ID<input id="deviceUser" maxlength="64" required placeholder="creator-name"></label>
-            <div class="form-grid">
-              <label>Role<select id="deviceRole"><option value="creator">Creator</option><option value="admin">Admin</option></select></label>
-              <label>IP<input id="deviceIp" maxlength="64" required placeholder="212.194.167.119"></label>
-            </div>
-            <label>HWID<input id="deviceHwid" maxlength="64" minlength="64" required placeholder="64-character fingerprint"></label>
-            <div class="form-actions">
-              <button class="button primary" type="submit">Authorize</button>
-              <button class="button ghost" id="copyMyIp" type="button">Copy my IP</button>
-              <button class="button ghost" id="copyMyHwidCommand" type="button">Copy HWID command</button>
-            </div>
-            <div id="deviceStatus" class="status"></div>
+            <div class="preview-wrap"><div class="preview-head"><span>Preview</span><span id="previewHint">Live</span></div><article id="previewCard" class="script-card editor-preview tilt-card" data-tilt-strength="4"><div class="card-media"><img id="previewImage" src="assets/anime-ability-arena.png" alt=""><div class="card-overlay"></div><div class="glass-sweep"></div></div><div class="card-content"><div class="card-context"><span id="previewGame">GAME</span><span class="context-dot"></span><span id="previewCategory">COMBAT</span></div><div class="card-title-row"><h3 id="previewTitle">Card title</h3><span id="previewVersion" class="version-chip">V1.0</span></div><p id="previewDescription">Description</p><div id="previewTags" class="tag-row"></div><div class="card-footer"><span id="previewStatus" class="status-inline"><span class="status-dot"></span>LIVE</span><span class="preview-view">VIEW</span></div></div></article></div>
+
+            <div class="form-actions editor-actions"><button class="button button-primary" type="submit">Save card <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></button><button class="button button-secondary" type="button" id="cancelEdit">Cancel</button><button class="button button-danger hidden" type="button" id="deleteCardBtn">Delete</button></div>
+            <div id="formStatus" class="status"></div>
           </form>
         </section>
-
-        <section class="glass-panel panel">
-          <div class="panel-head"><div><div class="eyebrow">PROFILE</div><h2>My device</h2></div></div>
-          <div class="profile-box">
-            <div><span>USER</span><strong id="profileUser">Azuno</strong></div>
-            <div><span>ROLE</span><strong id="profileRole">Admin</strong></div>
-            <div><span>DEVICE</span><strong id="profileDevice">Device</strong></div>
-            <div><span>IP</span><strong id="profileIp">Hidden</strong></div>
-          </div>
-        </section>
       </div>
 
-      <section class="glass-panel panel">
-        <div class="panel-head"><div><div class="eyebrow">PEOPLE</div><h2>Users</h2></div><span id="userCount">0</span></div>
-        <div id="usersList" class="users-table"></div>
-      </section>
-
-      <section class="glass-panel panel">
-        <div class="panel-head"><div><div class="eyebrow">DEVICES</div><h2>Devices</h2></div><span id="deviceCount">0</span></div>
-        <div id="devicesList" class="devices-list"></div>
-      </section>
-
-      <section class="glass-panel panel">
-        <div class="panel-head"><div><div class="eyebrow">ACTIVITY</div><h2>Recent activity</h2></div></div>
-        <div id="auditList" class="audit-list"></div>
+      <section id="adminTools" class="admin-tools hidden">
+        <div class="admin-tools-grid">
+          <section class="panel-card tool-card"><div class="panel-top"><div><span class="panel-kicker">ACCESS</span><h2>Add device</h2></div></div><form id="deviceForm" class="tool-form"><label>User ID<input id="deviceUser" maxlength="64" required placeholder="creator-name"></label><div class="form-grid two-col"><label>Role<select id="deviceRole"><option value="creator">Creator</option><option value="admin">Admin</option></select></label><label>IP<input id="deviceIp" maxlength="64" required placeholder="212.194.167.119"></label></div><label>HWID<input id="deviceHwid" minlength="64" maxlength="64" required placeholder="64 character fingerprint"></label><div class="form-actions"><button class="button button-primary" type="submit">Authorize</button><button class="button button-secondary" id="copyMyIp" type="button">Copy my IP</button><button class="button button-secondary" id="copyMyHwidCommand" type="button">Copy HWID command</button></div><div id="deviceStatus" class="status"></div></form></section>
+          <section class="panel-card tool-card"><div class="panel-top"><div><span class="panel-kicker">ACCOUNT</span><h2>My device</h2></div></div><div class="account-grid"><div><span>User</span><strong id="profileUser">-</strong></div><div><span>Role</span><strong id="profileRole">-</strong></div><div><span>Device</span><strong id="profileDevice">-</strong></div><div><span>IP</span><strong id="profileIp">-</strong></div></div></section>
+        </div>
+        <section class="panel-card tool-card"><div class="panel-top"><div><span class="panel-kicker">PEOPLE</span><h2>Users</h2></div><div class="panel-count" id="userCount">0</div></div><div id="usersList" class="user-list"></div></section>
+        <section class="panel-card tool-card"><div class="panel-top"><div><span class="panel-kicker">DEVICES</span><h2>Devices</h2></div><div class="panel-count" id="deviceCount">0</div></div><div id="devicesList" class="device-list"></div></section>
+        <section class="panel-card tool-card"><div class="panel-top"><div><span class="panel-kicker">ACTIVITY</span><h2>Recent activity</h2></div></div><div id="auditList" class="audit-list"></div></section>
       </section>
     </section>
-  </section>
-</main>
+  </main>
 
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-<script src="site-config.js?v=20260921-3"></script>
-<script src="admin.js?v=20260921-3"></script>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="site-config.js?v=20260921-7"></script>
+  <script src="admin.js?v=20260921-7"></script>
 </body>
 </html>

@@ -2,180 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#05060a">
-<meta name="description" content="Azuno Script Hub. Discover polished Roblox scripts with animated cards and creator drops.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06070c">
+<meta name="description" content="Azuno script hub. Discover Roblox scripts, creator drops, and polished script cards.">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Azuno">
 <meta property="og:title" content="Azuno | Script Hub">
-<meta property="og:description" content="Discover polished Roblox scripts, creator drops and fresh updates.">
-<meta property="og:image" content="assets/og-card.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:description" content="Discover Roblox scripts, creator drops, and polished script cards in one place.">
+<meta property="og:url" content="https://chematic.github.io/scripts-hub/">
+<meta property="og:image" content="https://chematic.github.io/scripts-hub/assets/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Azuno | Script Hub">
-<meta name="twitter:description" content="Discover polished Roblox scripts, creator drops and fresh updates.">
-<meta name="twitter:image" content="assets/og-card.png">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https://azuscripts-api.zizicacadelafrance.workers.dev; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<meta name="twitter:description" content="Discover Roblox scripts, creator drops, and polished script cards in one place.">
+<meta name="twitter:image" content="https://chematic.github.io/scripts-hub/assets/og-card.png">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="styles.css?v=20260921-3">
+<link rel="stylesheet" href="styles.css?v=20260921-7">
 <title>Azuno | Script Hub</title>
 </head>
-<body>
-<div class="ambient ambient-a"></div>
-<div class="ambient ambient-b"></div>
-<div class="grid"></div>
-<div class="noise"></div>
+<body class="site-body">
+  <div class="bg-layer bg-glow-one"></div>
+  <div class="bg-layer bg-glow-two"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
 
-<header class="topbar" id="siteHeader">
-  <div class="topbar-inner shell">
-    <a class="brand-wordmark" href="#top" aria-label="Azuno home">
-      <strong>AZUNO</strong>
-      <span>script hub</span>
-    </a>
-
-    <nav class="main-nav" aria-label="Main navigation">
-    <a class="nav-link active" href="#scripts">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 12h6M8 15h4"/></svg>
-      Scripts
-    </a>
-    <a class="nav-link" href="#creators">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3"/><path d="M17 11a3 3 0 1 0 0-6"/><path d="M21 20v-2a4 4 0 0 0-3-3.87"/></svg>
-      Creators
-    </a>
-  </nav>
-
-    <div class="top-actions">
-      <button class="icon-button" id="headerCopyDiscord" type="button" aria-label="Copy Discord" title="Copy @vhb7">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 6.6A16 16 0 0 1 12 5.9c1.7 0 3.3.25 4.9.7l-.4 1.1c1.3.7 2.3 1.8 2.9 3.1.5 1.1.7 2.4.6 3.7-.1 1.4-.5 2.7-1.2 3.9A17.7 17.7 0 0 1 14.9 20l-1.2-1.7c.5-.2 1-.5 1.4-.8-1.9.7-4 .7-6 .1.4.3.9.6 1.4.8L9.3 20a17.5 17.5 0 0 1-3.9-1.5c-.8-1.2-1.2-2.5-1.3-3.9-.1-1.4.1-2.6.6-3.8.6-1.3 1.6-2.4 2.9-3.1z"/><circle cx="9" cy="12.9" r="1.25"/><circle cx="15" cy="12.9" r="1.25"/></svg>
-    </button>
-    <a class="header-btn" href="admin.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="m13 5 7 7-7 7"/></svg>
-      Dashboard
+  <header class="site-header">
+    <div class="header-shell">
+      <a class="wordmark" href="#top" aria-label="Azuno home">
+        <span class="wordmark-name">Azuno</span>
+        <span class="wordmark-sub">script hub</span>
       </a>
-    </div>
-  </div>
-</header>
 
-<main id="top">
-  <section class="hero shell">
-    <div class="hero-copy reveal">
-      <div class="hero-status"><i></i><span id="typingText">Fresh scripts are landing.</span><b></b></div>
-      <h1>Scripts that<br><span>stand out.</span></h1>
-      <p>Browse polished Roblox scripts, clean cards and creator drops in one place.</p>
-      <div class="actions">
-        <a class="button primary" href="#scripts">
-          Explore scripts
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+      <nav class="header-nav" aria-label="Primary">
+        <a class="header-link active" href="#scripts"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v18H7.5A2.5 2.5 0 0 1 5 18.5z"/><path d="M5 17h14M8.5 7h6M8.5 10.5h7"/></svg></span>Scripts</a>
+        <a class="header-link" href="#creators"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 20v-1.7a3.8 3.8 0 0 0-3.8-3.8H7.8A3.8 3.8 0 0 0 4 18.3V20"/><circle cx="10" cy="7.4" r="3.4"/><path d="M16.2 7.2a3.3 3.3 0 0 1 0 6.4M16.3 14.6a3.7 3.7 0 0 1 3.7 3.7V20"/></svg></span>Creators</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="icon-link" href="https://discord.com/users/vhb7" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.1 6.2A16.3 16.3 0 0 1 12 5.7c1.3 0 2.6.2 3.9.5"/><path d="M7.2 8.1C8.5 7.4 10.2 7 12 7s3.5.4 4.8 1.1c1.3 2 2 4.2 2.2 6.5a14.3 14.3 0 0 1-3.6 2.1l-.8-1.2M16.8 8.1c-1.3-.7-3-1.1-4.8-1.1s-3.5.4-4.8 1.1C5.9 10 5.2 12.2 5 14.6a14.3 14.3 0 0 0 3.6 2.1l.8-1.2"/><circle cx="9.5" cy="12.1" r="1.2"/><circle cx="14.5" cy="12.1" r="1.2"/></svg>
         </a>
-        <a class="button ghost" href="admin.html">
-          Dashboard
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7z"/><path d="M10 7h4M10 11h4M10 15h4"/></svg>
-        </a>
-      </div>
-      <div class="stats">
-        <div><strong id="scriptCount">0</strong><span>scripts</span></div>
-        <div><strong id="categoryCount">0</strong><span>categories</span></div>
-        <div><strong>24/7</strong><span>hub access</span></div>
+        <a class="header-dashboard" href="admin.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 15v-3M12 15V9M16 15v-5"/></svg></span>Dashboard</a>
       </div>
     </div>
+  </header>
 
-    <div class="hero-preview reveal delay-1">
-      <article id="featuredCard" class="showcase-card tilt-card" data-tilt-strength="7">
-        <div class="showcase-media">
-          <img id="featuredImage" alt="Featured script">
-          <div class="media-glare"></div>
-          <div class="floating-badge">FEATURED</div>
-        </div>
-        <div class="showcase-body">
-          <div class="showcase-meta">
-            <span id="featuredGame">LOADING</span>
-            <span class="dot"></span>
-            <span id="featuredCategory">SCRIPT</span>
+  <main id="top">
+    <section class="hero-section">
+      <div class="content-shell hero-grid">
+        <div class="hero-copy reveal">
+          <div class="live-line"><span class="live-dot"></span><span id="typingStatus">Fresh scripts are landing.</span><span class="typing-caret" aria-hidden="true"></span></div>
+          <h1>Scripts that<br><span>stand out.</span></h1>
+          <p>Browse polished Roblox scripts, creator drops, and clean cards built to look as good as they work.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#scripts">Explore scripts <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
+            <a class="button button-secondary" href="#creators">Post a script <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></a>
           </div>
-          <h2 id="featuredTitle">Loading</h2>
-          <p id="featuredDescription">Loading the latest card.</p>
-          <div class="showcase-foot">
-            <span id="featuredVersion">V1.0</span>
-            <button id="featuredButton" class="inline-btn" type="button">View</button>
+          <div class="hero-stats">
+            <div><strong id="scriptCount">0</strong><span>scripts</span></div>
+            <div><strong id="categoryCount">0</strong><span>categories</span></div>
+            <div><strong>24/7</strong><span>hub access</span></div>
           </div>
         </div>
-      </article>
-    </div>
-  </section>
 
-  <section id="scripts" class="shell library">
-    <div class="section-heading">
-      <div>
-        <div class="eyebrow">BROWSE</div>
-        <h2>Pick a script.</h2>
+        <div class="featured-wrap reveal reveal-delay">
+          <article id="featuredCard" class="featured-card tilt-card" data-tilt-strength="5.5">
+            <div class="card-accent-line"></div>
+            <div class="featured-media tilt-media">
+              <img id="featuredImage" src="assets/anime-ability-arena.png" alt="Featured script" loading="eager">
+              <div class="media-vignette"></div>
+              <div class="media-chip">FEATURED</div>
+              <div class="media-glow"></div>
+              <div class="glass-sweep" aria-hidden="true"></div>
+            </div>
+            <div class="featured-body">
+              <div class="card-context"><span id="featuredGame">LOADING SCRIPT</span><span class="context-dot"></span><span id="featuredCategory">FEATURED</span></div>
+              <div class="featured-title-row"><h2 id="featuredTitle">Loading</h2><span id="featuredVersion" class="version-chip">V1.0</span></div>
+              <p id="featuredDescription">Loading the latest card.</p>
+              <div class="featured-footer"><span class="status-inline"><span class="status-dot"></span>Live</span><button id="featuredButton" class="card-view-btn" type="button">View <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button></div>
+            </div>
+          </article>
+        </div>
       </div>
-      <span id="resultCount">0 results</span>
-    </div>
+    </section>
 
-    <div class="controls">
-      <label class="search">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg>
-        <input id="searchInput" type="search" placeholder="Search scripts, games or tags" autocomplete="off">
-        <kbd>/</kbd>
-      </label>
-      <div id="filters" class="filters"></div>
-    </div>
+    <section id="scripts" class="section-block">
+      <div class="content-shell">
+        <div class="section-topline">
+          <div>
+            <div class="section-kicker">BROWSE</div>
+            <h2>Pick a script.</h2>
+          </div>
+          <div class="results-pill"><span id="resultCount">0 results</span></div>
+        </div>
 
-    <div id="cards" class="cards" aria-live="polite"></div>
-    <div id="emptyState" class="empty glass-panel hidden">
-      <strong>No scripts found.</strong>
-      <span>Try another search or category.</span>
-    </div>
-  </section>
+        <div class="library-toolbar">
+          <label class="search-box"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></span><input id="searchInput" type="search" placeholder="Search scripts, games or tags" autocomplete="off"><kbd>/</kbd></label>
+          <div id="filters" class="filter-row" aria-label="Categories"></div>
+        </div>
 
-  <section id="creators" class="shell creator-section">
-    <div class="creator-banner glass-panel reveal">
-      <div class="creator-copy">
-        <div class="eyebrow">FOR CREATORS</div>
-        <h2>Got a script?</h2>
-        <p>Send it over, get a polished card and publish it on the hub.</p>
+        <div id="cards" class="cards-grid" aria-live="polite"></div>
+        <div id="emptyState" class="empty-state hidden"><div class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5h14M7.5 6.5v11h9v-11M9.5 6.5l1-2h3l1 2"/><path d="M10 10.5v4M14 10.5v4"/></svg></div><strong>Nothing here yet.</strong><span>Try a different search or category.</span></div>
       </div>
-      <button id="creatorDiscordButton" class="button primary" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 6.6A16 16 0 0 1 12 5.9c1.7 0 3.3.25 4.9.7l-.4 1.1c1.3.7 2.3 1.8 2.9 3.1.5 1.1.7 2.4.6 3.7-.1 1.4-.5 2.7-1.2 3.9A17.7 17.7 0 0 1 14.9 20l-1.2-1.7c.5-.2 1-.5 1.4-.8-1.9.7-4 .7-6 .1.4.3.9.6 1.4.8L9.3 20a17.5 17.5 0 0 1-3.9-1.5c-.8-1.2-1.2-2.5-1.3-3.9-.1-1.4.1-2.6.6-3.8.6-1.3 1.6-2.4 2.9-3.1Z"/><circle cx="9" cy="12.9" r="1.25"/><circle cx="15" cy="12.9" r="1.25"/></svg>
-        Message @vhb7
-      </button>
-    </div>
-  </section>
-</main>
+    </section>
 
-<footer class="footer shell">
-  <span>© <span id="year"></span> Azuno</span>
-  <span>script hub</span>
-</footer>
-
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-panel" role="dialog" aria-modal="true">
-    <button class="icon-btn close" data-close aria-label="Close">×</button>
-    <div id="modalMedia" class="modal-media"></div>
-    <div class="modal-body">
-      <div id="modalBadges" class="badge-row"></div>
-      <div class="modal-game">
-        <span id="modalGame"></span>
-        <span class="dot"></span>
-        <span id="modalCategory"></span>
+    <section id="creators" class="section-block creator-section">
+      <div class="content-shell">
+        <div class="creator-card">
+          <div class="creator-copy">
+            <div class="section-kicker">FOR CREATORS</div>
+            <h2>Turn your script<br><span>into a drop.</span></h2>
+            <p>Get a polished card on the hub and share it with your audience. Start by messaging @vhb7.</p>
+            <div class="creator-actions"><button class="button button-primary" id="copyDiscord" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.1 6.2A16.3 16.3 0 0 1 12 5.7c1.3 0 2.6.2 3.9.5"/><path d="M7.2 8.1C8.5 7.4 10.2 7 12 7s3.5.4 4.8 1.1c1.3 2 2 4.2 2.2 6.5a14.3 14.3 0 0 1-3.6 2.1l-.8-1.2M16.8 8.1c-1.3-.7-3-1.1-4.8-1.1s-3.5.4-4.8 1.1C5.9 10 5.2 12.2 5 14.6a14.3 14.3 0 0 0 3.6 2.1l.8-1.2"/><circle cx="9.5" cy="12.1" r="1.2"/><circle cx="14.5" cy="12.1" r="1.2"/></svg>Copy @vhb7</button><a class="button button-secondary" href="admin.html">Creator dashboard</a></div>
+          </div>
+          <div class="creator-card-preview">
+            <div class="creator-mini-card">
+              <div class="mini-preview-top"><span>AZUNO</span><span>DROP 01</span></div>
+              <div class="mini-preview-title">Your script.<br><span>Our card.</span></div>
+              <div class="mini-preview-bottom"><span><span class="status-dot"></span>LIVE</span><span>VIEW ↗</span></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <h2 id="modalTitle"></h2>
-      <p id="modalDescription"></p>
-      <div id="modalTags" class="tags"></div>
-      <div class="modal-actions">
-        <a id="modalGet" class="button primary" target="_blank" rel="noopener noreferrer">Get script</a>
-        <button id="modalCopy" class="button ghost" type="button">Copy link</button>
-        <a id="modalCustomize" class="button ghost">Dashboard</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="content-shell footer-inner"><span>© <span id="year"></span> Azuno</span><span>Script hub for creators.</span></div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" data-close type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></svg></button>
+      <div id="modalMedia" class="modal-media"></div>
+      <div class="modal-body">
+        <div id="modalBadges" class="badge-row"></div>
+        <div id="modalGame" class="modal-game"></div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <div id="modalTags" class="tag-row"></div>
+        <div class="modal-actions"><a id="modalGet" class="button button-primary" target="_blank" rel="noopener noreferrer">Get script <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><button id="modalCopy" class="button button-secondary" type="button">Copy link</button><a id="modalCustomize" class="button button-ghost" href="admin.html">Customize</a></div>
       </div>
     </div>
   </div>
-</div>
 
-<script src="site-config.js?v=20260921-3"></script>
-<script src="app.js?v=20260921-3"></script>
+<script src="site-config.js?v=20260921-7"></script>
+<script src="app.js?v=20260921-7"></script>
 </body>
 </html>

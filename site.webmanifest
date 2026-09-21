@@ -1,16 +1,9 @@
 {
   "name": "Azuno Script Hub",
   "short_name": "Azuno",
-  "start_url": "./",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#05060a",
-  "theme_color": "#080a10",
-  "icons": [
-    {
-      "src": "assets/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "background_color": "#05060b",
+  "theme_color": "#06070c",
+  "icons": [{"src":"assets/favicon.svg","sizes":"any","type":"image/svg+xml"}]
 }
