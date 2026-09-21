@@ -157,7 +157,6 @@ svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   border:1px solid rgba(255,255,255,.1);
   border-radius:24px;overflow:hidden;
   background:
-    radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.095),transparent 38%),
     linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.02)),
     linear-gradient(135deg,color-mix(in srgb,var(--accent-start,#6b7cff) 12%,transparent),color-mix(in srgb,var(--accent-end,#9a5eff) 9%,transparent));
   box-shadow:var(--shadow);
@@ -175,8 +174,9 @@ svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   background:
     radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.16),transparent 24%),
     radial-gradient(circle at var(--mx) var(--my),color-mix(in srgb,var(--accent-start,#6b7cff) 14%,transparent),transparent 42%);
-  opacity:.72;mix-blend-mode:screen;transition:opacity .25s ease;
+  opacity:0;mix-blend-mode:screen;transition:opacity .25s ease;
 }
+.showcase-card:hover::after,.script-card:hover::after,.showcase-card.is-tilting::after,.script-card.is-tilting::after{opacity:.98}
 .showcase-card:hover::before,.script-card:hover::before,.showcase-card.is-tilting::before,.script-card.is-tilting::before{
   opacity:1;
   animation:glassSweep 4.8s cubic-bezier(.45,.05,.2,1) infinite;
@@ -190,8 +190,12 @@ svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   position:absolute;inset:-70%;
   transform:rotate(33deg) translateX(-30%);
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.03) 40%,rgba(255,255,255,.28) 50%,rgba(255,255,255,.02) 60%,transparent);
+  animation:none;
+  pointer-events:none;mix-blend-mode:screen;opacity:0;
+}
+.showcase-card:hover .media-glare,.script-card:hover .card-shine,.showcase-card.is-tilting .media-glare,.script-card.is-tilting .card-shine{
   animation:sweep 5.2s ease-in-out infinite;
-  pointer-events:none;mix-blend-mode:screen;
+  opacity:1;
 }
 .floating-badge{
   position:absolute;top:16px;left:16px;
@@ -785,8 +789,9 @@ body{overflow-x:clip}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .tilt-card::before{animation:none!important;opacity:.7}
-  .media-glare,.card-shine{animation-duration:9s}
+  .tilt-card::before{animation:none!important;opacity:0}
+  .media-glare,.card-shine{animation:none!important;opacity:0}
+  .showcase-card:hover::after,.script-card:hover::after,.showcase-card.is-tilting::after,.script-card.is-tilting::after{opacity:0}
 }
 
 .tilt-card{pointer-events:auto;touch-action:pan-y;}
