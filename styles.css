@@ -602,3 +602,156 @@ textarea{resize:vertical;min-height:104px}
   .session-chip{display:none}
   .profile-box{grid-template-columns:1fr}
 }
+
+
+/* AzuScripts visual stability patch */
+html{scroll-padding-top:96px}
+body{overflow-x:clip}
+
+.topbar{
+  position:sticky;
+  top:0;
+  min-height:84px;
+  height:auto;
+  padding:0 2px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  overflow:visible;
+  isolation:isolate;
+}
+.topbar::before{
+  content:"";
+  position:absolute;
+  inset:0 -1px;
+  z-index:-1;
+  background:linear-gradient(180deg,rgba(5,6,10,.96),rgba(5,6,10,.76));
+  border-bottom:1px solid rgba(255,255,255,.045);
+  backdrop-filter:blur(18px);
+}
+.brand-wordmark{min-width:0;position:relative;z-index:2}
+.main-nav{position:static;left:auto;transform:none;justify-self:center;z-index:2}
+.top-actions{justify-self:end;min-width:0;position:relative;z-index:2}
+
+.hero{
+  position:relative;
+  overflow:visible;
+  padding-top:78px;
+}
+.hero-preview{
+  min-width:0;
+  width:100%;
+  overflow:visible;
+  padding:18px;
+  margin:0;
+}
+.showcase-card{
+  transform-origin:center center;
+  backface-visibility:hidden;
+}
+
+/* The card itself owns the 3D transform. No entrance animation is allowed to overwrite it. */
+.tilt-card{
+  --tilt-x:0deg;
+  --tilt-y:0deg;
+  --mx:50%;
+  --my:50%;
+  transform:perspective(1100px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0,0,0);
+  transform-origin:center center;
+  backface-visibility:hidden;
+  will-change:transform;
+  transition:transform .42s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;
+}
+.tilt-card.is-tilting{
+  transform:perspective(1100px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0,-5px,0);
+  transition:transform .08s linear,box-shadow .25s ease;
+}
+.tilt-card::after{
+  transition:opacity .25s ease;
+}
+.tilt-card:hover::after{opacity:.9}
+
+.cards{align-items:stretch}
+.script-card{
+  min-height:430px;
+  height:100%;
+  overflow:hidden;
+}
+.card-media{
+  height:205px;
+  min-height:205px;
+  flex:0 0 auto;
+}
+.card-content{
+  min-height:225px;
+  height:100%;
+  display:flex;
+  flex:1 1 auto;
+  flex-direction:column;
+  min-width:0;
+}
+.card-top{flex:0 0 auto}
+.card-content h3{
+  min-height:52px;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+.card-content p{
+  min-height:58px;
+  margin:0;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+}
+.card-tags{
+  min-height:27px;
+  margin-top:12px;
+  align-content:flex-start;
+}
+.card-footer{
+  margin-top:auto;
+  padding-top:16px;
+  flex:0 0 auto;
+}
+.status-label{min-width:0}
+
+.showcase-body{display:flex;flex-direction:column;min-height:218px}
+.showcase-body h2{min-height:36px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.showcase-body p{min-height:41px;margin-bottom:18px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.showcase-foot{margin-top:auto}
+
+.hero-status{max-width:min(100%,420px);white-space:nowrap;overflow:hidden}
+.hero-status span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis}
+
+@media(max-width:1040px){
+  .topbar{grid-template-columns:1fr auto}
+  .main-nav{display:none}
+  .top-actions{justify-self:end}
+  .hero{padding-top:64px}
+  .hero-preview{max-width:760px;justify-self:center}
+}
+
+@media(max-width:760px){
+  .topbar{min-height:74px;padding:0}
+  .brand-wordmark strong{font-size:22px}
+  .hero{padding-top:54px}
+  .hero-preview{padding:14px;margin:0}
+  .script-card{min-height:410px}
+  .card-media{height:200px;min-height:200px}
+  .card-content{min-height:210px}
+}
+
+@media(max-width:560px){
+  .hero-preview{padding:10px;margin:0
+  .script-card{min-height:405px}
+  .card-content h3{font-size:20px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .tilt-card,.tilt-card.is-tilting{transform:none!important}
+}
+
+.tilt-card{pointer-events:auto;touch-action:pan-y;}

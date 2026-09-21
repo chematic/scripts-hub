@@ -58,26 +58,62 @@
   function attachTilt(root = document) {
     root.querySelectorAll(".tilt-card:not([data-tilt-ready])").forEach((card) => {
       card.dataset.tiltReady = "1";
-      let rect;
-      card.addEventListener("mouseenter", () => {
-        rect = card.getBoundingClientRect();
-        card.style.transition = "none";
-      });
-      card.addEventListener("mousemove", (event) => {
-        rect ||= card.getBoundingClientRect();
+      let rect = null;
+      let raf = 0;
+      let targetX = 0;
+      let targetY = 0;
+      let targetMX = 50;
+      let targetMY = 50;
+
+      const paint = () => {
+        raf = 0;
         const strength = Number(card.dataset.tiltStrength || 6);
-        const x = (event.clientX - rect.left) / rect.width - 0.5;
-        const y = (event.clientY - rect.top) / rect.height - 0.5;
-        card.style.setProperty("--mx", `${((x + 0.5) * 100).toFixed(2)}%`);
-        card.style.setProperty("--my", `${((y + 0.5) * 100).toFixed(2)}%`);
-        card.style.transform = `perspective(1100px) rotateX(${(-y * strength).toFixed(2)}deg) rotateY(${(x * strength).toFixed(2)}deg) translateY(-3px)`;
-      });
-      card.addEventListener("mouseleave", () => {
-        card.style.transition = "transform .42s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease";
-        card.style.transform = "";
+        const rx = -targetY * strength;
+        const ry = targetX * strength;
+        card.style.setProperty("--tilt-x", `${rx.toFixed(2)}deg`);
+        card.style.setProperty("--tilt-y", `${ry.toFixed(2)}deg`);
+        card.style.setProperty("--mx", `${targetMX.toFixed(2)}%`);
+        card.style.setProperty("--my", `${targetMY.toFixed(2)}%`);
+      };
+
+      const schedule = () => {
+        if (!raf) raf = requestAnimationFrame(paint);
+      };
+
+      card.addEventListener("pointerenter", (event) => {
+        if (event.pointerType === "touch") return;
+        rect = card.getBoundingClientRect();
+        card.classList.add("is-tilting");
         card.style.setProperty("--mx", "50%");
         card.style.setProperty("--my", "50%");
       });
+
+      card.addEventListener("pointermove", (event) => {
+        if (event.pointerType === "touch") return;
+        rect ||= card.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        targetX = Math.max(-0.5, Math.min(0.5, (event.clientX - rect.left) / rect.width - 0.5));
+        targetY = Math.max(-0.5, Math.min(0.5, (event.clientY - rect.top) / rect.height - 0.5));
+        targetMX = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+        targetMY = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
+        schedule();
+      });
+
+      const reset = () => {
+        targetX = 0;
+        targetY = 0;
+        targetMX = 50;
+        targetMY = 50;
+        card.classList.remove("is-tilting");
+        card.style.removeProperty("--tilt-x");
+        card.style.removeProperty("--tilt-y");
+        card.style.setProperty("--mx", "50%");
+        card.style.setProperty("--my", "50%");
+        rect = null;
+      };
+
+      card.addEventListener("pointerleave", reset);
+      card.addEventListener("pointercancel", reset);
     });
   }
 
@@ -102,7 +138,7 @@
 
   function cardElement(card) {
     const article = document.createElement("article");
-    article.className = "script-card tilt-card reveal";
+    article.className = "script-card tilt-card";
     article.dataset.tiltStrength = "5";
 
     const [accentStart, accentEnd] = accentPair(card.accent);
