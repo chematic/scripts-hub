@@ -10,14 +10,95 @@
   const safeExternal = v => { try { const u = new URL(v,location.href); return u.protocol === "https:" ? u.href : ""; } catch { return ""; } };
   const toast = m => { const e=$("#toast"); if(!e)return; e.textContent=m;e.classList.add("show");clearTimeout(window.__azToast);window.__azToast=setTimeout(()=>e.classList.remove("show"),2200); };
 
-  function attachTilt(root=document){
-    $$(".tilt-card:not([data-tilt-ready])",root).forEach(card=>{
-      card.dataset.tiltReady="1"; let raf=0,rect,active=false,tx=0.5,ty=0.5; const strength=Number(card.dataset.tiltStrength||4.5);
-      const draw=()=>{ raf=0; if(!active)return; const rx=(.5-ty)*strength,ry=(tx-.5)*strength; card.style.setProperty("--mx",`${(tx*100).toFixed(1)}%`);card.style.setProperty("--my",`${(ty*100).toFixed(1)}%`);card.style.transform=`perspective(1200px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translate3d(0,-5px,0) scale(1.012)`; };
-      const schedule=()=>{if(!raf)raf=requestAnimationFrame(draw)};
-      card.addEventListener("pointerenter",e=>{if(e.pointerType==="touch")return;active=true;rect=card.getBoundingClientRect();card.classList.add("is-hover");card.querySelector(".glass-sweep")?.classList.remove("sweep-now");void card.offsetWidth;card.querySelector(".glass-sweep")?.classList.add("sweep-now");card.style.transition="transform 90ms ease-out, box-shadow 220ms ease";tx=.5;ty=.5;schedule();});
-      card.addEventListener("pointermove",e=>{if(!active||e.pointerType==="touch")return;rect ||= card.getBoundingClientRect();tx=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));ty=Math.max(0,Math.min(1,(e.clientY-rect.top)/rect.height));schedule();});
-      card.addEventListener("pointerleave",e=>{if(e.pointerType==="touch")return;active=false;card.classList.remove("is-hover");card.style.transition="transform 440ms cubic-bezier(.2,.75,.2,1), box-shadow 260ms ease";card.style.transform="";card.style.setProperty("--mx","50%");card.style.setProperty("--my","50%");if(raf)cancelAnimationFrame(raf);raf=0;rect=null;});
+  const tiltRuntime = { bound: false, active: null, frame: 0, lastEvent: null };
+
+  function resetTilt(card) {
+    if (!card) return;
+    card.classList.remove("is-hover", "tilt-active");
+    card.style.setProperty("--tilt-rx", "0deg");
+    card.style.setProperty("--tilt-ry", "0deg");
+    card.style.setProperty("--tilt-lift", "0px");
+    card.style.setProperty("--tilt-scale", "1");
+    card.style.setProperty("--mx", "50%");
+    card.style.setProperty("--my", "50%");
+    card.style.transition = "transform 420ms cubic-bezier(.2,.75,.2,1), box-shadow 260ms ease";
+    card.querySelector(".glass-sweep")?.classList.remove("sweep-now");
+  }
+
+  function applyTilt(event) {
+    tiltRuntime.frame = 0;
+    const card = tiltRuntime.active;
+    const e = tiltRuntime.lastEvent;
+    if (!card || !e || !card.isConnected) return;
+
+    const rect = card.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    const px = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const py = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+    const strength = Number(card.dataset.tiltStrength || 5.5);
+    const rx = (0.5 - py) * strength;
+    const ry = (px - 0.5) * strength;
+
+    card.style.setProperty("--tilt-rx", `${rx.toFixed(2)}deg`);
+    card.style.setProperty("--tilt-ry", `${ry.toFixed(2)}deg`);
+    card.style.setProperty("--tilt-lift", "-6px");
+    card.style.setProperty("--tilt-scale", "1.015");
+    card.style.setProperty("--mx", `${(px * 100).toFixed(1)}%`);
+    card.style.setProperty("--my", `${(py * 100).toFixed(1)}%`);
+  }
+
+  function scheduleTilt() {
+    if (!tiltRuntime.frame) tiltRuntime.frame = requestAnimationFrame(applyTilt);
+  }
+
+  function setActiveTilt(card, event) {
+    if (tiltRuntime.active === card) return;
+    if (tiltRuntime.active) resetTilt(tiltRuntime.active);
+    tiltRuntime.active = card;
+    card.classList.add("is-hover", "tilt-active");
+    card.style.transition = "transform 85ms linear, box-shadow 180ms ease-out";
+    const sweep = card.querySelector(".glass-sweep");
+    sweep?.classList.remove("sweep-now");
+    void card.offsetWidth;
+    sweep?.classList.add("sweep-now");
+    tiltRuntime.lastEvent = event;
+    scheduleTilt();
+  }
+
+  function attachTilt() {
+    if (tiltRuntime.bound) return;
+    tiltRuntime.bound = true;
+
+    document.addEventListener("mousemove", event => {
+      const target = event.target;
+      const card = target instanceof Element ? target.closest(".tilt-card") : null;
+
+      if (!card) {
+        if (tiltRuntime.active) {
+          resetTilt(tiltRuntime.active);
+          tiltRuntime.active = null;
+        }
+        return;
+      }
+
+      setActiveTilt(card, event);
+      tiltRuntime.lastEvent = event;
+      scheduleTilt();
+    }, { passive: true });
+
+    window.addEventListener("blur", () => {
+      if (tiltRuntime.active) resetTilt(tiltRuntime.active);
+      tiltRuntime.active = null;
+      tiltRuntime.lastEvent = null;
+    });
+
+    document.addEventListener("mouseout", event => {
+      if (!event.relatedTarget && tiltRuntime.active) {
+        resetTilt(tiltRuntime.active);
+        tiltRuntime.active = null;
+        tiltRuntime.lastEvent = null;
+      }
     });
   }
 
