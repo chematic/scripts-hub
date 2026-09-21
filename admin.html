@@ -1,23 +1,189 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#05060a">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
-<title>AzuScripts — Creator Console</title><link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06070b">
+  <meta name="description" content="AzuScripts admin area.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https://azuscripts-api.zizicacadelafrance.workers.dev; font-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  <title>AzuScripts — Admin</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="admin-body"><div class="ambient ambient-a"></div><div class="ambient ambient-b"></div><div class="grid"></div><div class="noise"></div>
-<header class="topbar shell"><a class="brand" href="index.html"><span class="brand-mark">AZ</span><span><b>AzuScripts</b><small>creator console</small></span></a><div class="session-chip" id="sessionChip">Not signed in</div><a class="header-btn" href="index.html">Back to hub</a></header>
-<main class="shell admin-main">
-<section id="loginView" class="auth-layout"><div class="glass-panel auth-card"><div class="eyebrow">PROTECTED CONSOLE</div><h1>Sign in.</h1><p>Access is checked on the server against your authorized device HWID and current IP address. The page can be downloaded publicly; the protected API cannot be bypassed by changing frontend JavaScript.</p><form id="loginForm"><label>User ID<input id="loginUser" autocomplete="username" required maxlength="64" placeholder="azuno"></label><label>HWID<input id="loginHwid" autocomplete="off" required minlength="64" maxlength="64" placeholder="64-character HWID"></label><div class="form-actions"><button class="button primary" type="submit">Authenticate <span>↗</span></button><button class="button ghost" type="button" id="getHwidCommand">Copy HWID command</button></div></form><div id="loginStatus" class="status"></div></div></section>
-<section id="consoleView" class="hidden">
-  <div class="console-head"><div><div class="eyebrow">SECURE CONSOLE</div><h1 id="welcomeTitle">Dashboard</h1><p id="roleLine"></p></div><div class="console-actions"><button id="newCardBtn" class="button primary">New card <b>＋</b></button><button id="logoutBtn" class="button ghost">Sign out</button></div></div>
-  <div class="metrics"><div class="glass-panel metric"><span>YOUR CARDS</span><strong id="metricCards">0</strong></div><div class="glass-panel metric"><span>TODAY</span><strong id="metricToday">0 / 2</strong></div><div class="glass-panel metric"><span>ROLE</span><strong id="metricRole">—</strong></div><div class="glass-panel metric"><span>DEVICE</span><strong id="metricDevice">Protected</strong></div></div>
-  <div class="admin-grid">
-    <section class="glass-panel panel"><div class="panel-head"><div><div class="eyebrow">YOUR LIBRARY</div><h2>Cards</h2></div><span id="adminResultCount">0</span></div><div id="adminCards" class="admin-cards"></div><div id="adminEmpty" class="empty hidden"><strong>No cards yet.</strong><span>Create your first one.</span></div></section>
-    <section class="glass-panel panel" id="editorPanel"><div class="panel-head"><div><div class="eyebrow">CARD BUILDER</div><h2 id="editorTitle">Create a card</h2></div><span id="quotaText">—</span></div><form id="cardForm"><input type="hidden" id="cardId"><div class="form-grid"><label>Title<input id="cardTitle" required maxlength="80"></label><label>Game / category line<input id="cardGame" required maxlength="80" placeholder="ROBLOX · COMBAT"></label><label>Version<input id="cardVersion" maxlength="24" placeholder="V1.0"></label><label>Category<select id="cardCategory"><option value="Combat">Combat</option><option value="Utility">Utility</option><option value="Automation">Automation</option><option value="Simulation">Simulation</option><option value="Other">Other</option></select></label><label class="wide">Description<textarea id="cardDescription" required maxlength="500" rows="4"></textarea></label><label class="wide">Thumbnail URL<input id="cardImage" type="url" maxlength="800" placeholder="https://…"></label><label class="wide">Redirect / Get Script URL<input id="cardRedirect" type="url" inputmode="url" maxlength="800" placeholder="https://work.ink/…" required></label><label class="wide">Tags <span class="muted">comma separated</span><input id="cardTags" maxlength="300" placeholder="Auto Kill, Anti Void"></label></div><div class="builder-grid"><div><span class="label-title">Gradient preset</span><div id="gradientChoices" class="gradient-choices"></div></div><div><span class="label-title">Accent</span><input id="cardAccent" class="color-input" type="color" value="#6b7cff"></div></div><div class="live-preview"><div class="preview-label">LIVE PREVIEW</div><article id="previewCard" class="script-card compact tilt-card"><div class="card-media"><img id="previewImage" alt=""><div class="card-shine"></div></div><div class="card-content"><div class="card-top"><span id="previewCategory" class="mini-badge">OTHER</span><span id="previewVersion" class="version">V1.0</span></div><h3 id="previewTitle">Card title</h3><p id="previewDescription">Your description appears here.</p><div id="previewTags" class="card-tags"></div></div></article></div><div class="form-actions"><button class="button primary" type="submit">Save card <b>✓</b></button><button class="button ghost" type="button" id="cancelEdit">Cancel</button><button class="button danger hidden" type="button" id="deleteCardBtn">Delete card</button></div><div id="formStatus" class="status"></div></form></section>
-  </div>
-  <section id="adminTools" class="glass-panel panel hidden"><div class="panel-head"><div><div class="eyebrow">ADMIN ONLY</div><h2>Access management</h2></div></div><div class="admin-tools-grid"><div><h3>Authorize a device</h3><form id="deviceForm"><label>User ID<input id="deviceUser" required maxlength="64"></label><label>Role<select id="deviceRole"><option value="creator">Creator</option><option value="admin">Admin</option></select></label><label>HWID hash/input<input id="deviceHwid" required maxlength="128" placeholder="Raw HWID from helper"></label><label>Allowed IP<input id="deviceIp" required maxlength="64" placeholder="203.0.113.10"></label><button class="button primary" type="submit">Create / authorize</button></form><div id="deviceStatus" class="status"></div></div><div><h3>Current users</h3><div id="usersList" class="users-list"></div></div></div></section>
-</section></main><div id="toast" class="toast" role="status"></div>
-<script src="site-config.js"></script><script src="admin.js"></script>
-</body></html>
+<body class="admin-body">
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="grid"></div>
+  <div class="noise"></div>
+
+  <header class="topbar shell">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">AZ</span>
+      <span><b>AzuScripts</b><small>admin</small></span>
+    </a>
+    <div class="topbar-right">
+      <span class="session-chip" id="sessionChip">Signed out</span>
+      <a class="header-btn" href="index.html">Hub</a>
+      <button class="header-btn danger-link hidden" id="logoutBtn" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="shell admin-main">
+    <section id="loginView" class="auth-layout">
+      <div class="glass-panel auth-card login-card">
+        <div class="eyebrow">ADMIN</div>
+        <h1>Sign in</h1>
+        <p class="auth-note">Use your User ID and HWID.</p>
+        <form id="loginForm">
+          <label>User ID<input id="loginUser" autocomplete="username" maxlength="64" placeholder="azuno" required></label>
+          <label>HWID<input id="loginHwid" autocomplete="off" inputmode="text" minlength="64" maxlength="64" placeholder="64-character fingerprint" required></label>
+          <div class="form-actions">
+            <button class="button primary" type="submit">Sign in</button>
+            <button class="button ghost" type="button" id="getHwidCommand">Copy HWID command</button>
+          </div>
+        </form>
+        <div id="loginStatus" class="status"></div>
+      </div>
+    </section>
+
+    <section id="consoleView" class="hidden">
+      <div class="console-head">
+        <div>
+          <div class="eyebrow">DASHBOARD</div>
+          <h1 id="welcomeTitle">Welcome</h1>
+          <div class="admin-subline"><span id="roleLine">—</span><span>•</span><span id="deviceLine">—</span></div>
+        </div>
+        <div class="console-actions">
+          <button id="newCardBtn" class="button primary" type="button">New card <b>＋</b></button>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="glass-panel metric"><span>CARDS</span><strong id="metricCards">0</strong></div>
+        <div class="glass-panel metric"><span>TODAY</span><strong id="metricToday">—</strong></div>
+        <div class="glass-panel metric"><span>USERS</span><strong id="metricUsers">—</strong></div>
+        <div class="glass-panel metric"><span>DEVICES</span><strong id="metricDevices">—</strong></div>
+      </div>
+
+      <div class="admin-layout">
+        <section class="glass-panel panel cards-panel">
+          <div class="panel-head">
+            <div><div class="eyebrow">LIBRARY</div><h2>Cards</h2></div>
+            <span id="adminResultCount">0</span>
+          </div>
+          <div class="panel-toolbar">
+            <div class="search compact-search"><span>⌕</span><input id="adminCardSearch" type="search" placeholder="Search cards"></div>
+            <button class="small-button" id="refreshBtn" type="button">Refresh</button>
+          </div>
+          <div id="adminCards" class="admin-cards"></div>
+          <div id="adminEmpty" class="empty hidden"><strong>No cards.</strong><span>Create one to get started.</span></div>
+        </section>
+
+        <section class="glass-panel panel editor-panel" id="editorPanel">
+          <div class="panel-head">
+            <div><div class="eyebrow">EDITOR</div><h2 id="editorTitle">New card</h2></div>
+            <span id="quotaText">—</span>
+          </div>
+
+          <form id="cardForm">
+            <input type="hidden" id="cardId">
+            <div class="form-grid">
+              <label>Title<input id="cardTitle" maxlength="80" required placeholder="Anime Ability Arena"></label>
+              <label>Game<input id="cardGame" maxlength="80" required placeholder="Anime Ability Arena"></label>
+              <label>Category<select id="cardCategory"><option value="Combat">Combat</option><option value="Utility">Utility</option><option value="Automation">Automation</option><option value="Simulation">Simulation</option><option value="Other">Other</option></select></label>
+              <label>Version<input id="cardVersion" maxlength="24" placeholder="V1.0"></label>
+              <label>Status<select id="cardStatus"><option value="Live">Live</option><option value="Updated">Updated</option><option value="Beta">Beta</option><option value="Offline">Offline</option></select></label>
+              <label class="wide">Description<textarea id="cardDescription" maxlength="500" rows="4" required placeholder="What does this script do?"></textarea></label>
+              <label class="wide">Thumbnail<input id="cardImage" maxlength="800" placeholder="https://… or assets/image.png"></label>
+              <label class="wide">Get link<input id="cardRedirect" maxlength="800" placeholder="https://work.ink/…" required></label>
+              <label class="wide">Tags <span class="muted">comma separated</span><input id="cardTags" maxlength="300" placeholder="Auto Kill, Anti Void"></label>
+            </div>
+
+            <div id="featuredWrap" class="check-row hidden">
+              <label class="check-label"><input id="cardFeatured" type="checkbox"><span>Featured card</span></label>
+            </div>
+
+            <div class="builder-grid">
+              <div>
+                <div class="label-title">Gradient</div>
+                <div id="gradientChoices" class="gradient-choices"></div>
+              </div>
+              <div>
+                <div class="label-title">Accent</div>
+                <input id="cardAccent" class="color-input" type="color" value="#6b7cff">
+              </div>
+            </div>
+
+            <div class="live-preview">
+              <div class="preview-label">PREVIEW</div>
+              <article id="previewCard" class="script-card compact tilt-card" data-tilt-strength="4">
+                <div class="card-media"><img id="previewImage" alt=""><div class="card-shine"></div></div>
+                <div class="card-content">
+                  <div class="preview-game-line"><span id="previewGame">Game</span><span>•</span><span id="previewCategory">COMBAT</span></div>
+                  <div class="card-top"><span id="previewStatus" class="mini-badge">LIVE</span><span id="previewVersion" class="version">V1.0</span></div>
+                  <h3 id="previewTitle">Card title</h3>
+                  <p id="previewDescription">Description</p>
+                  <div id="previewTags" class="card-tags"></div>
+                </div>
+              </article>
+            </div>
+
+            <div class="form-actions">
+              <button class="button primary" type="submit">Save card</button>
+              <button class="button ghost" type="button" id="cancelEdit">Cancel</button>
+              <button class="button danger hidden" type="button" id="deleteCardBtn">Delete</button>
+            </div>
+            <div id="formStatus" class="status"></div>
+          </form>
+        </section>
+      </div>
+
+      <section id="adminTools" class="hidden admin-tools-stack">
+        <div class="admin-tools-grid new-admin-grid">
+          <section class="glass-panel panel">
+            <div class="panel-head"><div><div class="eyebrow">ACCESS</div><h2>Add device</h2></div></div>
+            <form id="deviceForm">
+              <label>User ID<input id="deviceUser" maxlength="64" required placeholder="creator-name"></label>
+              <div class="form-grid">
+                <label>Role<select id="deviceRole"><option value="creator">Creator</option><option value="admin">Admin</option></select></label>
+                <label>IP<input id="deviceIp" maxlength="64" required placeholder="212.194.167.119"></label>
+              </div>
+              <label>HWID<input id="deviceHwid" maxlength="64" minlength="64" required placeholder="64-character fingerprint"></label>
+              <div class="form-actions"><button class="button primary" type="submit">Authorize</button><button class="button ghost" id="copyMyIp" type="button">Copy my IP</button><button class="button ghost" id="copyMyHwidCommand" type="button">Copy HWID command</button></div>
+              <div id="deviceStatus" class="status"></div>
+            </form>
+          </section>
+
+          <section class="glass-panel panel">
+            <div class="panel-head"><div><div class="eyebrow">PROFILE</div><h2>My device</h2></div></div>
+            <div class="profile-box">
+              <div><span>USER</span><strong id="profileUser">—</strong></div>
+              <div><span>ROLE</span><strong id="profileRole">—</strong></div>
+              <div><span>DEVICE</span><strong id="profileDevice">—</strong></div>
+              <div><span>IP</span><strong id="profileIp">—</strong></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="glass-panel panel">
+          <div class="panel-head"><div><div class="eyebrow">PEOPLE</div><h2>Users</h2></div><span id="userCount">0</span></div>
+          <div id="usersList" class="users-table"></div>
+        </section>
+
+        <section class="glass-panel panel">
+          <div class="panel-head"><div><div class="eyebrow">DEVICES</div><h2>Devices</h2></div><span id="deviceCount">0</span></div>
+          <div id="devicesList" class="devices-list"></div>
+        </section>
+
+        <section class="glass-panel panel">
+          <div class="panel-head"><div><div class="eyebrow">ACTIVITY</div><h2>Recent activity</h2></div></div>
+          <div id="auditList" class="audit-list"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="site-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

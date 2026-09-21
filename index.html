@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#05060a">
 <meta name="description" content="AzuScripts — a premium, animated script hub.">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https://azuscripts-api.zizicacadelafrance.workers.dev; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 <title>AzuScripts — Script Hub</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -19,7 +19,7 @@
 <main id="top">
 <section class="hero shell">
   <div class="hero-copy reveal">
-    <div class="eyebrow"><i></i> LIVE LIBRARY · EDGE PROTECTED</div>
+    <div class="eyebrow"><i></i> LIVE LIBRARY</div>
     <h1>Scripts with<br><span>real presence.</span></h1>
     <p>A fast, animated hub for your scripts. Glass cards, cursor depth, custom gradients, tags and secure creator controls.</p>
     <div class="actions"><a class="button primary" href="#scripts">Explore scripts <b>↘</b></a><a class="button ghost" href="admin.html">Open builder <b>✦</b></a></div>
@@ -40,7 +40,7 @@
 </section>
 <section id="access" class="shell section-space">
   <div class="glass-panel access-panel reveal">
-    <div><div class="eyebrow">DEVICE ACCESS</div><h2>Request creator access.</h2><p>A normal browser cannot read a real Windows machine HWID. Use the included PowerShell helper, then send the copied HWID to the hub owner. The API can independently read your public IP at the edge.</p></div>
+    <div><div class="eyebrow">DEVICE ACCESS</div><h2>Request creator access.</h2><p>Run the HWID helper, then send the fingerprint with your public IP to the hub owner.</p></div>
     <div class="access-actions"><button id="copyIp" class="button primary">Copy your IP</button><button id="copyHwidCommand" class="button ghost">Copy HWID command</button><a class="button ghost" href="get-hwid.ps1" download>Download HWID helper</a><button id="copyApi" class="button ghost">Copy API URL</button></div><div class="hwid-copy-row"><input id="hwidPaste" maxlength="64" placeholder="Paste the 64-character HWID here"><button id="copyHwid" class="button ghost">Copy your HWID</button></div>
     <div id="accessStatus" class="small-status">Checking API…</div>
   </div>
