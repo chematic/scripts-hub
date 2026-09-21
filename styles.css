@@ -611,23 +611,34 @@ body{overflow-x:clip}
 .topbar{
   position:sticky;
   top:0;
+  z-index:40;
+  width:100%;
   min-height:84px;
-  height:auto;
-  padding:0 2px;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-  align-items:center;
-  overflow:visible;
+  height:84px;
+  padding:0;
   isolation:isolate;
+  overflow:visible;
+  background:linear-gradient(180deg,rgba(5,6,10,.96),rgba(5,6,10,.76));
+  border-bottom:1px solid rgba(255,255,255,.045);
+  backdrop-filter:blur(18px);
 }
 .topbar::before{
   content:"";
   position:absolute;
-  inset:0 -1px;
+  inset:0;
   z-index:-1;
-  background:linear-gradient(180deg,rgba(5,6,10,.96),rgba(5,6,10,.76));
-  border-bottom:1px solid rgba(255,255,255,.045);
-  backdrop-filter:blur(18px);
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 80% -120%,rgba(108,120,255,.10),transparent 45%),
+    linear-gradient(180deg,rgba(5,6,10,.96),rgba(5,6,10,.76));
+}
+.topbar-inner{
+  position:relative;
+  height:100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  min-width:0;
 }
 .brand-wordmark{min-width:0;position:relative;z-index:2}
 .main-nav{position:static;left:auto;transform:none;justify-self:center;z-index:2}
@@ -727,7 +738,7 @@ body{overflow-x:clip}
 .hero-status span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis}
 
 @media(max-width:1040px){
-  .topbar{grid-template-columns:1fr auto}
+  .topbar-inner{grid-template-columns:1fr auto}
   .main-nav{display:none}
   .top-actions{justify-self:end}
   .hero{padding-top:64px}
@@ -735,7 +746,8 @@ body{overflow-x:clip}
 }
 
 @media(max-width:760px){
-  .topbar{min-height:74px;padding:0}
+  .topbar{min-height:74px;height:74px}
+  .topbar-inner{grid-template-columns:1fr auto}
   .brand-wordmark strong{font-size:22px}
   .hero{padding-top:54px}
   .hero-preview{padding:14px;margin:0}
@@ -744,14 +756,15 @@ body{overflow-x:clip}
   .card-content{min-height:210px}
 }
 
-@media(max-width:560px){
-  .hero-preview{padding:10px;margin:0
-  .script-card{min-height:405px}
-  .card-content h3{font-size:20px}
-}
-
 @media(prefers-reduced-motion:reduce){
   .tilt-card,.tilt-card.is-tilting{transform:none!important}
 }
 
 .tilt-card{pointer-events:auto;touch-action:pan-y;}
+
+/* Header desktop fix: full-width shell with centered content. */
+.topbar-inner > *{min-width:0}
+.main-nav{white-space:nowrap}
+@media(max-width:760px){
+  .topbar-inner{width:min(100% - 24px,1180px)}
+}
