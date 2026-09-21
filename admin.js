@@ -11,6 +11,22 @@
     ice: ["#ecf6ff", "#5d8dff"],
     blueRed: ["#2d77ff", "#ff4b6e"],
   };
+  function accentPair(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    const parts = raw.split(",");
+    const valid = /^#[0-9a-f]{6}$/i;
+    if (valid.test(parts[0] || "") && valid.test(parts[1] || "")) return [parts[0], parts[1]];
+    if (valid.test(parts[0] || "")) return [parts[0], parts[0]];
+    return ["#6b7cff", "#9a5eff"];
+  }
+
+  function setAccentPreview() {
+    const start = $("#cardAccentStart")?.value || "#6b7cff";
+    const end = $("#cardAccentEnd")?.value || "#9a5eff";
+    const preview = $("#accentPreview");
+    if (preview) preview.style.background = `linear-gradient(135deg, ${start}, ${end})`;
+  }
+
   const $ = (s) => document.querySelector(s);
   const esc = (v) => String(v ?? "");
 
@@ -89,11 +105,17 @@
     const [a, b] = gradients[state.gradient];
     const card = $("#previewCard");
     card.style.background = `linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025)), linear-gradient(135deg, ${a}20, ${b}14)`;
-    card.style.setProperty("--accent", $("#cardAccent").value || "#6b7cff");
+    const accentStart = $("#cardAccentStart")?.value || "#6b7cff";
+    const accentEnd = $("#cardAccentEnd")?.value || "#9a5eff";
+    card.style.setProperty("--accent-start", accentStart);
+    card.style.setProperty("--accent-end", accentEnd);
+    setAccentPreview();
     $("#previewTitle").textContent = $("#cardTitle").value || "Card title";
-    $("#previewGame").textContent = ($("#cardGame").value || "Game").toUpperCase();
-    $("#previewCategory").textContent = ($("#cardCategory").value || "Other").toUpperCase();
-    $("#previewStatus").textContent = ($("#cardStatus").value || "Live").toUpperCase();
+    $("#previewGame").textContent = $("#cardGame").value || "Game";
+    $("#previewCategory").textContent = $("#cardCategory").value || "Other";
+    const previewStatus = $("#cardStatus").value || "Live";
+    $("#previewStatus").textContent = previewStatus;
+    if ($("#previewFooterStatus")) $("#previewFooterStatus").textContent = previewStatus;
     $("#previewVersion").textContent = $("#cardVersion").value || "V1.0";
     $("#previewDescription").textContent = $("#cardDescription").value || "Description";
     $("#previewImage").src = safeImage($("#cardImage").value);
@@ -109,7 +131,8 @@
   function resetForm() {
     $("#cardForm").reset();
     $("#cardId").value = "";
-    $("#cardAccent").value = "#6b7cff";
+    $("#cardAccentStart").value = "#6b7cff";
+    $("#cardAccentEnd").value = "#9a5eff";
     state.gradient = "violet";
     fillGradients();
     renderPreview();
@@ -130,7 +153,9 @@
     $("#cardImage").value = card.image || "";
     $("#cardRedirect").value = card.redirect || "";
     $("#cardTags").value = Array.isArray(card.tags) ? card.tags.join(", ") : "";
-    $("#cardAccent").value = /^#[0-9a-f]{6}$/i.test(card.accent || "") ? card.accent : "#6b7cff";
+    const [accentStart, accentEnd] = accentPair(card.accent);
+    $("#cardAccentStart").value = accentStart;
+    $("#cardAccentEnd").value = accentEnd;
     $("#cardFeatured").checked = Boolean(card.featured);
     state.gradient = gradients[card.gradient] ? card.gradient : "violet";
     fillGradients();
@@ -143,36 +168,77 @@
   function renderCards() {
     const query = $("#adminCardSearch").value.trim().toLowerCase();
     const cards = state.cards.filter((card) => JSON.stringify(card).toLowerCase().includes(query));
+
     $("#adminResultCount").textContent = String(cards.length);
-    $("#metricCards").textContent = String(state.me?.role === "admin" ? state.cards.length : state.cards.filter((c) => c.ownerId === state.me?.id).length);
+    $("#metricCards").textContent = String(
+      state.me?.role === "admin"
+        ? state.cards.length
+        : state.cards.filter((card) => card.ownerId === state.me?.id).length
+    );
+
     const wrap = $("#adminCards");
     wrap.replaceChildren();
+
     cards.forEach((card) => {
       const row = document.createElement("div");
       row.className = "admin-card admin-card-v2";
+
       const img = document.createElement("img");
       img.src = safeImage(card.image);
       img.alt = "";
       img.loading = "lazy";
       img.referrerPolicy = "no-referrer";
+
       const info = document.createElement("div");
-      const owner = state.me?.role === "admin" ? ` · ${card.ownerName || card.ownerId || "—"}` : "";
+      info.className = "admin-card-info";
+
       const meta = document.createElement("div");
-      meta.className = "card-line-v2";
-      const game = document.createElement("span"); game.textContent = card.game || "Game";
-      const dot = document.createElement("span"); dot.textContent = "•";
-      const category = document.createElement("span"); category.textContent = card.category || "Other";
-      meta.append(game, dot, category);
-      const title = document.createElement("h3"); title.textContent = card.title || "Untitled";
-      const sub = document.createElement("p"); sub.textContent = `${card.version || "V1.0"}${owner}`;
-      info.append(meta, title, sub);
-      const actions = document.createElement("div"); actions.className = "card-actions";
-      const edit = document.createElement("button"); edit.className = "tiny-btn"; edit.textContent = "Edit"; edit.addEventListener("click", () => editCard(card));
-      const del = document.createElement("button"); del.className = "tiny-btn danger-btn"; del.textContent = "Delete"; del.addEventListener("click", () => deleteCard(card));
+      meta.className = "admin-card-meta";
+
+      const game = document.createElement("span");
+      game.className = "admin-game";
+      game.textContent = card.game || "Game";
+
+      const category = document.createElement("span");
+      category.className = "admin-category";
+      category.textContent = card.category || "Other";
+
+      meta.append(game, category);
+
+      const title = document.createElement("h3");
+      title.textContent = card.title || "Untitled";
+
+      const details = document.createElement("div");
+      details.className = "admin-card-details";
+      const version = document.createElement("span");
+      version.textContent = card.version || "V1.0";
+      const status = document.createElement("span");
+      status.className = `admin-status status-${String(card.status || "Live").toLowerCase()}`;
+      status.textContent = card.status || "Live";
+      details.append(version, status);
+
+      info.append(meta, title, details);
+
+      const actions = document.createElement("div");
+      actions.className = "card-actions";
+
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "tiny-btn";
+      edit.textContent = "Edit";
+      edit.addEventListener("click", () => editCard(card));
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "tiny-btn danger-btn";
+      del.textContent = "Delete";
+      del.addEventListener("click", () => deleteCard(card));
+
       actions.append(edit, del);
       row.append(img, info, actions);
       wrap.appendChild(row);
     });
+
     $("#adminEmpty").classList.toggle("hidden", cards.length > 0);
   }
 
@@ -183,12 +249,12 @@
     $("#sessionChip").textContent = `${data.id} · ${data.role}`;
     $("#welcomeTitle").textContent = `Welcome, ${data.id}`;
     $("#roleLine").textContent = data.role;
-    $("#deviceLine").textContent = `Device ${data.deviceId || "—"}`;
+    $("#deviceLine").textContent = `Device ${data.deviceId || "N/A"}`;
     $("#metricToday").textContent = data.dailyCreates < 0 ? "∞" : `${data.dailyCreatesRemaining} / ${data.dailyCreates}`;
     $("#quotaText").textContent = data.dailyCreates < 0 ? "Unlimited" : `${data.dailyCreatesRemaining} left today`;
     $("#profileUser").textContent = data.id;
     $("#profileRole").textContent = data.role;
-    $("#profileDevice").textContent = data.deviceId || "—";
+    $("#profileDevice").textContent = data.deviceId || "N/A";
     if (data.role === "admin") {
       $("#adminTools").classList.remove("hidden");
       $("#featuredWrap").classList.remove("hidden");
@@ -219,7 +285,7 @@
     $("#metricDevices").textContent = String(stats.data.devices ?? 0);
     $("#userCount").textContent = String(state.users.length);
     $("#deviceCount").textContent = String(state.devices.length);
-    $("#profileIp").textContent = ip.data.ip || "—";
+    $("#profileIp").textContent = ip.data.ip || "N/A";
     renderUsers();
     renderDevices();
     renderAudit();
@@ -276,7 +342,7 @@
     state.logs.slice(0, 60).forEach((log) => {
       const row = document.createElement("div"); row.className = "audit-row";
       const action = document.createElement("strong"); action.textContent = log.action;
-      const detail = document.createElement("span"); detail.textContent = `${log.userId || "system"} · ${log.targetId || "—"}`;
+      const detail = document.createElement("span"); detail.textContent = `${log.userId || "system"} · ${log.targetId || "N/A"}`;
       const time = document.createElement("time");
       const date = new Date(log.createdAt); time.textContent = Number.isNaN(date.valueOf()) ? log.createdAt : date.toLocaleString();
       row.append(action, detail, time);
@@ -286,7 +352,7 @@
 
   async function login(event) {
     event.preventDefault();
-    setStatus($("#loginStatus"), "Signing in…", true);
+    setStatus($("#loginStatus"), "Signing in", true);
     try {
       const userId = $("#loginUser").value.trim();
       const hwid = $("#loginHwid").value.trim();
@@ -306,7 +372,7 @@
 
   async function saveCard(event) {
     event.preventDefault();
-    setStatus($("#formStatus"), "Saving…", true);
+    setStatus($("#formStatus"), "Saving", true);
     const id = $("#cardId").value;
     const body = {
       title: $("#cardTitle").value.trim(),
@@ -318,7 +384,7 @@
       image: $("#cardImage").value.trim(),
       redirect: $("#cardRedirect").value.trim(),
       tags: $("#cardTags").value.split(",").map((x) => x.trim()).filter(Boolean),
-      accent: $("#cardAccent").value,
+      accent: `${$("#cardAccentStart").value},${$("#cardAccentEnd").value}`,
       gradient: state.gradient,
       featured: Boolean($("#cardFeatured").checked),
     };
@@ -331,7 +397,7 @@
       await loadMe();
       await loadAdminData();
     } catch (error) {
-      setStatus($("#formStatus"), error.message || "Could not save card.", false);
+      setStatus($("#formStatus"), error.message || "Could not save this card.", false);
     }
   }
 
@@ -340,7 +406,7 @@
     try {
       const { response, data } = await api(`/api/cards/${encodeURIComponent(card.id)}`, { method: "DELETE" });
       if (!response.ok) throw new Error(data.error || "Could not delete card.");
-      toast("Card deleted.");
+      toast("Card deleted");
       if ($("#cardId").value === card.id) resetForm();
       await loadCards();
       await loadMe();
@@ -350,14 +416,14 @@
 
   async function authorize(event) {
     event.preventDefault();
-    setStatus($("#deviceStatus"), "Saving…", true);
+    setStatus($("#deviceStatus"), "Saving", true);
     try {
       const { response, data } = await api("/api/admin/devices", {
         method: "POST",
         body: JSON.stringify({ userId: $("#deviceUser").value.trim(), role: $("#deviceRole").value, hwid: $("#deviceHwid").value.trim(), ip: $("#deviceIp").value.trim() }),
       });
       if (!response.ok) throw new Error(data.error || "Could not authorize device.");
-      setStatus($("#deviceStatus"), "Device authorized.", true);
+      setStatus($("#deviceStatus"), "Device authorized", true);
       event.target.reset();
       await Promise.all([loadMe(), loadAdminData()]);
     } catch (error) { setStatus($("#deviceStatus"), error.message || "Could not authorize device.", false); }
@@ -428,7 +494,11 @@
     }
   }
 
-  ["cardTitle","cardGame","cardVersion","cardDescription","cardImage","cardTags","cardCategory","cardStatus","cardAccent"].forEach((id) => $("#" + id).addEventListener("input", renderPreview));
+  ["cardTitle","cardGame","cardVersion","cardDescription","cardImage","cardTags","cardCategory","cardStatus","cardAccentStart","cardAccentEnd"].forEach((id) => {
+    const el = $("#" + id);
+    el?.addEventListener("input", renderPreview);
+    el?.addEventListener("change", renderPreview);
+  });
   $("#loginForm").addEventListener("submit", login);
   $("#cardForm").addEventListener("submit", saveCard);
   $("#newCardBtn").addEventListener("click", () => { resetForm(); $("#editorPanel").scrollIntoView({ behavior: "smooth", block: "start" }); });
@@ -437,9 +507,11 @@
   $("#logoutBtn").addEventListener("click", logout);
   $("#refreshBtn").addEventListener("click", async () => { try { await loadMe(); await loadCards(); await loadAdminData(); toast("Refreshed."); } catch (e) { toast(e.message || "Refresh failed."); } });
   $("#adminCardSearch").addEventListener("input", renderCards);
-  $("#getHwidCommand").addEventListener("click", () => copyText('powershell -NoProfile -ExecutionPolicy Bypass -File .\\get-hwid.ps1', "HWID command copied."));
-  $("#copyMyHwidCommand").addEventListener("click", () => copyText('powershell -NoProfile -ExecutionPolicy Bypass -File .\\get-hwid.ps1', "HWID command copied."));
-  $("#copyMyIp").addEventListener("click", async () => { try { const { response, data } = await api("/api/me/ip"); if (!response.ok) throw new Error(data.error || "Could not read IP."); $("#profileIp").textContent = data.ip || "—"; $("#deviceIp").value = data.ip || ""; copyText(data.ip || "", "IP copied."); } catch (e) { toast(e.message || "Could not read IP."); } });
+  $("#getHwidCommand")?.addEventListener("click", () => copyText('powershell -NoProfile -ExecutionPolicy Bypass -File .\\get-hwid.ps1', "HWID command copied"));
+  $("#copyMyHwidCommand")?.addEventListener("click", () => copyText('powershell -NoProfile -ExecutionPolicy Bypass -File .\\get-hwid.ps1', "HWID command copied"));
+  $("#copyMyIp")?.addEventListener("click", async () => { try { const { response, data } = await api("/api/me/ip"); if (!response.ok) throw new Error(data.error || "Could not read IP."); $("#profileIp").textContent = data.ip || "N/A"; $("#deviceIp").value = data.ip || ""; copyText(data.ip || "", "IP copied."); } catch (e) { toast(e.message || "Could not read IP."); } });
+  $("#copyDiscord")?.addEventListener("click", () => copyText("@vhb7", "Discord copied"));
+
   fillGradients();
   renderPreview();
   loadInitial();

@@ -1,47 +1,60 @@
-# AzuScripts Frontend
+# Azuno Frontend
 
-Static frontend for the AzuScripts hub.
+Static frontend for the Azuno Script Hub.
+
+## Included
+
+- Animated glass UI with cursor tilt and diagonal light sweep
+- Script cards with stable bottom actions even with long descriptions
+- Search and category filters
+- Dual accent colors for cards
+- SVG favicon and web manifest
+- Discord social preview metadata and local OG image
+- Creator callout with Discord copy button
+- Admin dashboard with cleaner card editor
 
 ## Configure
 
-`site-config.js` already points at the current Worker:
+`site-config.js` points to the current Worker:
 
 ```js
 window.AZU_CONFIG = Object.freeze({
   API_BASE: "https://azuscripts-api.zizicacadelafrance.workers.dev",
-  BRAND: "AzuScripts",
-  SITE_TITLE: "AzuScripts — Script Hub"
+  BRAND: "Azuno",
+  SITE_TITLE: "Azuno | Script Hub"
 });
 ```
 
-Upload this folder to your GitHub Pages repository or another static host.
-
-## Admin
-
-Open `admin.html`.
-
-Sign in with your User ID and 64-character HWID fingerprint. The API checks the user, authorized device and current IP before issuing a 12-hour session.
-
-The admin area includes:
-
-- card creation/editing/deletion
-- separate Game + Category fields
-- live card preview
-- gradient presets + custom accent
-- user role/status controls
-- device authorization/revocation
-- session revocation
-- daily quota reset
-- recent activity
+For the best Discord preview, keep `assets/og-card.png` on the same public site path.
 
 ## HWID
 
-A normal browser cannot read a genuine Windows machine serial/HWID. `get-hwid.ps1` creates the local fingerprint used by the hub.
+A normal browser cannot read a genuine Windows machine serial. The included `get-hwid.ps1` helper creates the local 64-character fingerprint used by the hub.
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\get-hwid.ps1
 ```
 
-## Security
+## Admin
 
-The browser is treated as untrusted. It cannot grant itself an admin role, edit another user's card or change the creator quota.
+Open `admin.html` and sign in with the User ID and HWID already authorized by the backend.
+
+Cards now support:
+
+- preset gradients
+- custom accent start and end colors
+- separate Game and Category fields
+- status and version
+- thumbnail and HTTPS redirect
+- tags
+
+
+## Discord preview
+
+Discord can read the OG image from your public site. Once you know the final site origin, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\set-site-origin.ps1 -Origin "https://your-domain.example"
+```
+
+This writes the absolute `og:image`, `twitter:image`, and `og:url` values into the static HTML.

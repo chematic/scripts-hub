@@ -4,53 +4,176 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#05060a">
-<meta name="description" content="AzuScripts — a premium, animated script hub.">
+<meta name="description" content="Azuno Script Hub. Discover polished Roblox scripts with animated cards and creator drops.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Azuno | Script Hub">
+<meta property="og:description" content="Discover polished Roblox scripts, creator drops and fresh updates.">
+<meta property="og:image" content="assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Azuno | Script Hub">
+<meta name="twitter:description" content="Discover polished Roblox scripts, creator drops and fresh updates.">
+<meta name="twitter:image" content="assets/og-card.png">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https://azuscripts-api.zizicacadelafrance.workers.dev; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
-<title>AzuScripts — Script Hub</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="styles.css">
+<title>Azuno | Script Hub</title>
 </head>
 <body>
-<div class="ambient ambient-a"></div><div class="ambient ambient-b"></div><div class="grid"></div><div class="noise"></div>
+<div class="ambient ambient-a"></div>
+<div class="ambient ambient-b"></div>
+<div class="grid"></div>
+<div class="noise"></div>
+
 <header class="topbar shell">
-  <a class="brand" href="#top"><span class="brand-mark">AZ</span><span><b>AzuScripts</b><small>script hub</small></span></a>
-  <nav><a class="active" href="#scripts">Scripts</a><a href="#access">Access</a><a href="#about">About</a></nav>
-  <a class="header-btn" href="admin.html">Customize <span>↗</span></a>
+  <a class="brand-wordmark" href="#top" aria-label="Azuno home">
+    <strong>AZUNO</strong>
+    <span>script hub</span>
+  </a>
+
+  <nav class="main-nav" aria-label="Main navigation">
+    <a class="nav-link active" href="#scripts">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 12h6M8 15h4"/></svg>
+      Scripts
+    </a>
+    <a class="nav-link" href="#creators">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3"/><path d="M17 11a3 3 0 1 0 0-6"/><path d="M21 20v-2a4 4 0 0 0-3-3.87"/></svg>
+      Creators
+    </a>
+  </nav>
+
+  <div class="top-actions">
+    <button class="icon-button" id="headerCopyDiscord" type="button" aria-label="Copy Discord" title="Copy @vhb7">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 6.6A16 16 0 0 1 12 5.9c1.7 0 3.3.25 4.9.7l-.4 1.1c1.3.7 2.3 1.8 2.9 3.1.5 1.1.7 2.4.6 3.7-.1 1.4-.5 2.7-1.2 3.9A17.7 17.7 0 0 1 14.9 20l-1.2-1.7c.5-.2 1-.5 1.4-.8-1.9.7-4 .7-6 .1.4.3.9.6 1.4.8L9.3 20a17.5 17.5 0 0 1-3.9-1.5c-.8-1.2-1.2-2.5-1.3-3.9-.1-1.4.1-2.6.6-3.8.6-1.3 1.6-2.4 2.9-3.1z"/><circle cx="9" cy="12.9" r="1.25"/><circle cx="15" cy="12.9" r="1.25"/></svg>
+    </button>
+    <a class="header-btn" href="admin.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/><path d="m13 5 7 7-7 7"/></svg>
+      Dashboard
+    </a>
+  </div>
 </header>
+
 <main id="top">
-<section class="hero shell">
-  <div class="hero-copy reveal">
-    <div class="eyebrow"><i></i> LIVE LIBRARY</div>
-    <h1>Scripts with<br><span>real presence.</span></h1>
-    <p>A fast, animated hub for your scripts. Glass cards, cursor depth, custom gradients, tags and secure creator controls.</p>
-    <div class="actions"><a class="button primary" href="#scripts">Explore scripts <b>↘</b></a><a class="button ghost" href="admin.html">Open builder <b>✦</b></a></div>
-    <div class="stats"><div><strong id="scriptCount">—</strong><span>scripts</span></div><div><strong id="categoryCount">—</strong><span>categories</span></div><div><strong>API</strong><span>protected writes</span></div></div>
-  </div>
-  <div class="hero-preview reveal delay-1">
-    <article id="featuredCard" class="showcase-card tilt-card" data-tilt-strength="8">
-      <div class="showcase-media"><img id="featuredImage" alt="Featured script"><div class="media-glare"></div><div class="floating-badge">FEATURED</div></div>
-      <div class="showcase-body"><div id="featuredGame" class="meta">LOADING</div><h2 id="featuredTitle">Loading…</h2><p id="featuredDescription">Fetching your live catalog.</p><div class="showcase-foot"><span id="featuredVersion">—</span><button id="featuredButton" class="inline-btn">View card →</button></div></div>
-    </article>
-  </div>
-</section>
-<section id="scripts" class="shell library">
-  <div class="section-heading"><div><div class="eyebrow">THE LIBRARY</div><h2>Pick a script.</h2></div><span id="resultCount">0 results</span></div>
-  <div class="controls"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search games, features, tags…" autocomplete="off"><kbd>/</kbd></label><div id="filters" class="filters"></div></div>
-  <div id="cards" class="cards" aria-live="polite"></div>
-  <div id="emptyState" class="empty glass-panel hidden"><strong>Nothing here yet.</strong><span>Try another search or category.</span></div>
-</section>
-<section id="access" class="shell section-space">
-  <div class="glass-panel access-panel reveal">
-    <div><div class="eyebrow">DEVICE ACCESS</div><h2>Request creator access.</h2><p>Run the HWID helper, then send the fingerprint with your public IP to the hub owner.</p></div>
-    <div class="access-actions"><button id="copyIp" class="button primary">Copy your IP</button><button id="copyHwidCommand" class="button ghost">Copy HWID command</button><a class="button ghost" href="get-hwid.ps1" download>Download HWID helper</a><button id="copyApi" class="button ghost">Copy API URL</button></div><div class="hwid-copy-row"><input id="hwidPaste" maxlength="64" placeholder="Paste the 64-character HWID here"><button id="copyHwid" class="button ghost">Copy your HWID</button></div>
-    <div id="accessStatus" class="small-status">Checking API…</div>
-  </div>
-</section>
-<section id="about" class="shell section-space">
-  <div class="glass-panel about-panel"><div><div class="eyebrow">BUILT FOR CREATORS</div><h2>Not another<br><span>link tree.</span></h2></div><p>Public catalog data comes from the backend database. Protected actions are validated server-side, including roles, ownership, device authorization and daily creator limits.</p><a class="button ghost" href="admin.html">Customize a card →</a></div>
-</section>
+  <section class="hero shell">
+    <div class="hero-copy reveal">
+      <div class="hero-status"><i></i><span id="typingText">Fresh scripts are landing.</span><b></b></div>
+      <h1>Scripts that<br><span>stand out.</span></h1>
+      <p>Browse polished Roblox scripts, clean cards and creator drops in one place.</p>
+      <div class="actions">
+        <a class="button primary" href="#scripts">
+          Explore scripts
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </a>
+        <a class="button ghost" href="admin.html">
+          Dashboard
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7z"/><path d="M10 7h4M10 11h4M10 15h4"/></svg>
+        </a>
+      </div>
+      <div class="stats">
+        <div><strong id="scriptCount">0</strong><span>scripts</span></div>
+        <div><strong id="categoryCount">0</strong><span>categories</span></div>
+        <div><strong>24/7</strong><span>hub access</span></div>
+      </div>
+    </div>
+
+    <div class="hero-preview reveal delay-1">
+      <article id="featuredCard" class="showcase-card tilt-card" data-tilt-strength="7">
+        <div class="showcase-media">
+          <img id="featuredImage" alt="Featured script">
+          <div class="media-glare"></div>
+          <div class="floating-badge">FEATURED</div>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-meta">
+            <span id="featuredGame">LOADING</span>
+            <span class="dot"></span>
+            <span id="featuredCategory">SCRIPT</span>
+          </div>
+          <h2 id="featuredTitle">Loading</h2>
+          <p id="featuredDescription">Fetching the latest card.</p>
+          <div class="showcase-foot">
+            <span id="featuredVersion">V1.0</span>
+            <button id="featuredButton" class="inline-btn" type="button">View card</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="scripts" class="shell library">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">BROWSE</div>
+        <h2>Pick a script.</h2>
+      </div>
+      <span id="resultCount">0 results</span>
+    </div>
+
+    <div class="controls">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg>
+        <input id="searchInput" type="search" placeholder="Search scripts, games or tags" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <div id="filters" class="filters"></div>
+    </div>
+
+    <div id="cards" class="cards" aria-live="polite"></div>
+    <div id="emptyState" class="empty glass-panel hidden">
+      <strong>No scripts found.</strong>
+      <span>Try another search or category.</span>
+    </div>
+  </section>
+
+  <section id="creators" class="shell creator-section">
+    <div class="creator-banner glass-panel reveal">
+      <div class="creator-copy">
+        <div class="eyebrow">FOR CREATORS</div>
+        <h2>Got a script?</h2>
+        <p>Send it over, get a polished card and publish it on the hub.</p>
+      </div>
+      <button id="creatorDiscordButton" class="button primary" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 6.6A16 16 0 0 1 12 5.9c1.7 0 3.3.25 4.9.7l-.4 1.1c1.3.7 2.3 1.8 2.9 3.1.5 1.1.7 2.4.6 3.7-.1 1.4-.5 2.7-1.2 3.9A17.7 17.7 0 0 1 14.9 20l-1.2-1.7c.5-.2 1-.5 1.4-.8-1.9.7-4 .7-6 .1.4.3.9.6 1.4.8L9.3 20a17.5 17.5 0 0 1-3.9-1.5c-.8-1.2-1.2-2.5-1.3-3.9-.1-1.4.1-2.6.6-3.8.6-1.3 1.6-2.4 2.9-3.1Z"/><circle cx="9" cy="12.9" r="1.25"/><circle cx="15" cy="12.9" r="1.25"/></svg>
+        Message @vhb7
+      </button>
+    </div>
+  </section>
 </main>
-<footer class="footer shell"><span>© <span id="year"></span> AzuScripts</span><span>Animated glass UI · secure API</span></footer>
+
+<footer class="footer shell">
+  <span>© <span id="year"></span> Azuno</span>
+  <span>script hub</span>
+</footer>
+
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<div id="modal" class="modal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="modal-panel" role="dialog" aria-modal="true"><button class="icon-btn close" data-close aria-label="Close">×</button><div id="modalMedia" class="modal-media"></div><div class="modal-body"><div id="modalBadges" class="badge-row"></div><div id="modalGame" class="meta"></div><h2 id="modalTitle"></h2><p id="modalDescription"></p><div id="modalTags" class="tags"></div><div class="modal-actions"><a id="modalGet" class="button primary" target="_blank" rel="noopener noreferrer">Get script ↗</a><button id="modalCopy" class="button ghost">Copy link</button><a id="modalCustomize" class="button ghost">Customize card ✦</a></div></div></div></div>
-<script src="site-config.js"></script><script src="app.js"></script>
-</body></html>
+
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true">
+    <button class="icon-btn close" data-close aria-label="Close">×</button>
+    <div id="modalMedia" class="modal-media"></div>
+    <div class="modal-body">
+      <div id="modalBadges" class="badge-row"></div>
+      <div class="modal-game">
+        <span id="modalGame"></span>
+        <span class="dot"></span>
+        <span id="modalCategory"></span>
+      </div>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+      <div id="modalTags" class="tags"></div>
+      <div class="modal-actions">
+        <a id="modalGet" class="button primary" target="_blank" rel="noopener noreferrer">Get script</a>
+        <button id="modalCopy" class="button ghost" type="button">Copy link</button>
+        <a id="modalCustomize" class="button ghost">Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="site-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

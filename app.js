@@ -1,20 +1,399 @@
 (() => {
   const cfg = window.AZU_CONFIG || { API_BASE: "" };
   const API = String(cfg.API_BASE || "").replace(/\/$/, "");
+  const DISCORD = "@vhb7";
   const state = { cards: [], filtered: [], category: "All" };
-  const $ = s => document.querySelector(s);
-  const esc = s => String(s ?? "");
-  function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2300)}
-  function api(path, options={}){return fetch(API + path, { ...options, headers:{ Accept:"application/json", ...(options.body?{"Content-Type":"application/json"}:{}), ...(options.headers||{}) } })}
-  function imgSrc(v){ if(!v)return ""; try{ return new URL(v, location.href).href }catch{return ""} }
-  function safeExternal(v){ try{ const u=new URL(v,location.href); return u.protocol==="https:"?u.href:"" }catch{return ""} }
-  function attachTilt(root=document){root.querySelectorAll(".tilt-card:not([data-tilt-ready])").forEach(card=>{card.dataset.tiltReady="1";let rect;card.addEventListener("mouseenter",()=>{rect=card.getBoundingClientRect();card.style.transition="none"});card.addEventListener("mousemove",e=>{rect ||= card.getBoundingClientRect();const strength=Number(card.dataset.tiltStrength||6);const x=(e.clientX-rect.left)/rect.width-.5;const y=(e.clientY-rect.top)/rect.height-.5;card.style.transform=`perspective(1000px) rotateX(${(-y*strength).toFixed(2)}deg) rotateY(${(x*strength).toFixed(2)}deg) translateY(-2px)`});card.addEventListener("mouseleave",()=>{card.style.transition="transform .35s ease,box-shadow .25s ease";card.style.transform=""})})}
-  function renderFilters(){const categories=["All",...new Set(state.cards.map(c=>c.category).filter(Boolean))];const f=$("#filters");f.replaceChildren();categories.forEach(cat=>{const b=document.createElement("button");b.className="filter"+(cat===state.category?" active":"");b.textContent=cat;b.addEventListener("click",()=>{state.category=cat;renderFilters();renderCards()});f.appendChild(b)})}
-  function cardElement(card){const a=document.createElement("article");a.className="script-card tilt-card";a.dataset.tiltStrength="5";const media=document.createElement("div");media.className="card-media";const img=document.createElement("img");img.src=imgSrc(card.image);img.alt=esc(card.title);img.loading="lazy";img.onerror=()=>{img.style.opacity="0"};media.appendChild(img);const shine=document.createElement("div");shine.className="card-shine";media.appendChild(shine);const content=document.createElement("div");content.className="card-content";const top=document.createElement("div");top.className="card-top";const cat=document.createElement("span");cat.className="mini-badge";cat.textContent=esc(card.category||"Other").toUpperCase();const ver=document.createElement("span");ver.className="version";ver.textContent=esc(card.version||"V1");top.append(cat,ver);const h=document.createElement("h3");h.textContent=esc(card.title);const p=document.createElement("p");p.textContent=esc(card.description);const tags=document.createElement("div");tags.className="card-tags";(Array.isArray(card.tags)?card.tags:[]).slice(0,4).forEach(t=>{const s=document.createElement("span");s.className="tag";s.textContent=esc(t);tags.appendChild(s)});const footer=document.createElement("div");footer.className="card-footer";const status=document.createElement("span");status.className="muted";status.textContent=esc(card.status||"Live");const btn=document.createElement("button");btn.className="small-button";btn.textContent="View →";btn.addEventListener("click",()=>openModal(card));footer.append(status,btn);content.append(top,h,p,tags,footer);a.append(media,content);a.style.setProperty("--accent",card.accent||"#6d7cff");return a}
-  function renderCards(){const q=$("#searchInput").value.trim().toLowerCase();state.filtered=state.cards.filter(c=>(state.category==="All"||c.category===state.category)&&(!q||JSON.stringify(c).toLowerCase().includes(q)));const wrap=$("#cards");wrap.replaceChildren();state.filtered.forEach(c=>wrap.appendChild(cardElement(c)));$("#resultCount").textContent=`${state.filtered.length} result${state.filtered.length===1?"":"s"}`;$("#emptyState").classList.toggle("hidden",state.filtered.length>0);attachTilt(wrap)}
-  function openModal(card){$("#modal").classList.add("open");$("#modal").setAttribute("aria-hidden","false");$("#modalMedia").replaceChildren();const img=document.createElement("img");img.src=imgSrc(card.image);img.alt=esc(card.title);$("#modalMedia").appendChild(img);$("#modalGame").textContent=esc(card.game||"");$("#modalTitle").textContent=esc(card.title);$("#modalDescription").textContent=esc(card.description);$("#modalBadges").replaceChildren();[card.category,card.version].filter(Boolean).forEach(v=>{const s=document.createElement("span");s.className="tag";s.textContent=esc(v);$("#modalBadges").appendChild(s)});$("#modalTags").replaceChildren();(Array.isArray(card.tags)?card.tags:[]).forEach(t=>{const s=document.createElement("span");s.className="tag";s.textContent=esc(t);$("#modalTags").appendChild(s)});const url=safeExternal(card.redirect);const get=$("#modalGet");get.href=url||"#";get.rel="noopener noreferrer";get.target="_blank";get.setAttribute("aria-disabled",!url);$("#modalCopy").onclick=async()=>{if(!url)return toast("No valid HTTPS link.");await navigator.clipboard.writeText(url);toast("Link copied.")};const custom=$("#modalCustomize");custom.href=`admin.html?card=${encodeURIComponent(card.id)}`}
-  function closeModal(){$("#modal").classList.remove("open");$("#modal").setAttribute("aria-hidden","true")}
-  async function copy(text,msg){try{await navigator.clipboard.writeText(text);toast(msg)}catch{toast("Clipboard permission was blocked.")}}
-  async function load(){document.title=cfg.SITE_TITLE||document.title;$("#year").textContent=new Date().getFullYear();try{const r=await api("/api/catalog");const j=await r.json();if(!r.ok)throw new Error(j.error||"Catalog unavailable");state.cards=Array.isArray(j.cards)?j.cards:[];state.cards.sort((a,b)=>(Number(b.featured)||0)-(Number(a.featured)||0));renderFilters();renderCards();$("#scriptCount").textContent=state.cards.length;$("#categoryCount").textContent=new Set(state.cards.map(c=>c.category).filter(Boolean)).size;const f=state.cards[0];if(f){$("#featuredImage").src=imgSrc(f.image);$("#featuredGame").textContent=esc(f.game||"");$("#featuredTitle").textContent=esc(f.title);$("#featuredDescription").textContent=esc(f.description);$("#featuredVersion").textContent=esc(f.version||"");$("#featuredButton").onclick=()=>openModal(f)}}catch(e){toast(e.message||"API error")};attachTilt(document)}
-  $("#searchInput").addEventListener("input",renderCards);document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){e.preventDefault();$("#searchInput").focus()}if(e.key==="Escape")closeModal()});document.querySelectorAll("[data-close]").forEach(x=>x.addEventListener("click",closeModal));$("#copyIp").addEventListener("click",async()=>{try{const r=await api("/api/me/ip");const j=await r.json();if(!r.ok)throw new Error(j.error);await copy(j.ip,"Your IP was copied.");$("#accessStatus").textContent=`Edge sees ${j.ip}`;$("#accessStatus").className="small-status"}catch(e){toast(e.message||"Could not read IP")}});$("#copyHwidCommand").addEventListener("click",()=>copy('powershell -NoProfile -ExecutionPolicy Bypass -File .\\get-hwid.ps1',"HWID helper command copied."));$("#copyApi").addEventListener("click",()=>copy(API||location.origin,"API URL copied."));$("#copyHwid").addEventListener("click",()=>{const v=$("#hwidPaste").value.trim();if(!/^[a-f0-9]{64}$/i.test(v))return toast("Paste a valid 64-character HWID first.");copy(v.toUpperCase(),"HWID copied.")});load();
+
+  const $ = (s) => document.querySelector(s);
+
+  function toast(message) {
+    const el = $("#toast");
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(window.__azuToast);
+    window.__azuToast = setTimeout(() => el.classList.remove("show"), 2300);
+  }
+
+  function api(path, options = {}) {
+    return fetch(API + path, {
+      ...options,
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        ...(options.headers || {})
+      }
+    });
+  }
+
+  function imgSrc(value) {
+    const v = String(value || "").trim();
+    if (!v) return "assets/anime-ability-arena.png";
+    try {
+      return new URL(v, location.href).href;
+    } catch {
+      return "";
+    }
+  }
+
+  function safeExternal(value) {
+    try {
+      const u = new URL(value, location.href);
+      return u.protocol === "https:" ? u.href : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function accentPair(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    const parts = raw.split(",");
+    const hex = /^#[0-9a-f]{6}$/i;
+    if (hex.test(parts[0] || "") && hex.test(parts[1] || "")) return [parts[0], parts[1]];
+    if (hex.test(parts[0] || "")) return [parts[0], parts[0]];
+    return ["#6b7cff", "#9a5eff"];
+  }
+
+  function attachTilt(root = document) {
+    root.querySelectorAll(".tilt-card:not([data-tilt-ready])").forEach((card) => {
+      card.dataset.tiltReady = "1";
+      let rect;
+      card.addEventListener("mouseenter", () => {
+        rect = card.getBoundingClientRect();
+        card.style.transition = "none";
+      });
+      card.addEventListener("mousemove", (event) => {
+        rect ||= card.getBoundingClientRect();
+        const strength = Number(card.dataset.tiltStrength || 6);
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        card.style.setProperty("--mx", `${((x + 0.5) * 100).toFixed(2)}%`);
+        card.style.setProperty("--my", `${((y + 0.5) * 100).toFixed(2)}%`);
+        card.style.transform = `perspective(1100px) rotateX(${(-y * strength).toFixed(2)}deg) rotateY(${(x * strength).toFixed(2)}deg) translateY(-3px)`;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transition = "transform .42s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease";
+        card.style.transform = "";
+        card.style.setProperty("--mx", "50%");
+        card.style.setProperty("--my", "50%");
+      });
+    });
+  }
+
+  function renderFilters() {
+    const categories = ["All", ...new Set(state.cards.map((card) => card.category).filter(Boolean))];
+    const wrap = $("#filters");
+    wrap.replaceChildren();
+
+    categories.forEach((category) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `filter${category === state.category ? " active" : ""}`;
+      button.textContent = category;
+      button.addEventListener("click", () => {
+        state.category = category;
+        renderFilters();
+        renderCards();
+      });
+      wrap.appendChild(button);
+    });
+  }
+
+  function cardElement(card) {
+    const article = document.createElement("article");
+    article.className = "script-card tilt-card reveal";
+    article.dataset.tiltStrength = "5";
+
+    const [accentStart, accentEnd] = accentPair(card.accent);
+    article.style.setProperty("--accent-start", accentStart);
+    article.style.setProperty("--accent-end", accentEnd);
+
+    const media = document.createElement("div");
+    media.className = "card-media";
+
+    const img = document.createElement("img");
+    img.src = imgSrc(card.image);
+    img.alt = String(card.title || "Script");
+    img.loading = "lazy";
+    img.referrerPolicy = "no-referrer";
+    img.onerror = () => {
+      img.src = "assets/anime-ability-arena.png";
+    };
+
+    const shine = document.createElement("div");
+    shine.className = "card-shine";
+    media.append(img, shine);
+
+    const content = document.createElement("div");
+    content.className = "card-content";
+
+    const line = document.createElement("div");
+    line.className = "card-meta-line";
+
+    const game = document.createElement("span");
+    game.className = "card-game";
+    game.textContent = String(card.game || "Game");
+
+    const category = document.createElement("span");
+    category.className = "category-pill";
+    category.textContent = String(card.category || "Other");
+
+    line.append(game, category);
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+
+    const badge = document.createElement("span");
+    badge.className = `mini-badge status-${String(card.status || "Live").toLowerCase()}`;
+    badge.textContent = String(card.status || "Live");
+
+    const version = document.createElement("span");
+    version.className = "version";
+    version.textContent = String(card.version || "V1.0");
+
+    top.append(badge, version);
+
+    const title = document.createElement("h3");
+    title.textContent = String(card.title || "Untitled");
+
+    const description = document.createElement("p");
+    description.textContent = String(card.description || "");
+
+    const tags = document.createElement("div");
+    tags.className = "card-tags";
+    (Array.isArray(card.tags) ? card.tags : []).slice(0, 4).forEach((tag) => {
+      const chip = document.createElement("span");
+      chip.className = "tag";
+      chip.textContent = String(tag);
+      tags.appendChild(chip);
+    });
+
+    const footer = document.createElement("div");
+    footer.className = "card-footer";
+
+    const status = document.createElement("span");
+    status.className = "status-label";
+    const dot = document.createElement("i");
+    const statusText = document.createElement("span");
+    statusText.textContent = String(card.status || "Live");
+    status.append(dot, statusText);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "small-button";
+    button.textContent = "View";
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openModal(card);
+    });
+
+    footer.append(status, button);
+    content.append(line, top, title, description, tags, footer);
+    article.append(media, content);
+
+    article.addEventListener("click", (event) => {
+      if (event.target.closest("button")) return;
+      openModal(card);
+    });
+
+    return article;
+  }
+
+  function renderCards() {
+    const q = $("#searchInput").value.trim().toLowerCase();
+
+    state.filtered = state.cards.filter((card) => {
+      const categoryMatch = state.category === "All" || card.category === state.category;
+      const searchMatch = !q || JSON.stringify(card).toLowerCase().includes(q);
+      return categoryMatch && searchMatch;
+    });
+
+    const wrap = $("#cards");
+    wrap.replaceChildren();
+
+    state.filtered.forEach((card, index) => {
+      const node = cardElement(card);
+      node.style.animationDelay = `${Math.min(index * 45, 350)}ms`;
+      wrap.appendChild(node);
+    });
+
+    const count = state.filtered.length;
+    $("#resultCount").textContent = `${count} result${count === 1 ? "" : "s"}`;
+    $("#emptyState").classList.toggle("hidden", count > 0);
+    attachTilt(wrap);
+  }
+
+  function openModal(card) {
+    const modal = $("#modal");
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+
+    $("#modalMedia").replaceChildren();
+
+    const img = document.createElement("img");
+    img.src = imgSrc(card.image);
+    img.alt = String(card.title || "Script");
+    img.referrerPolicy = "no-referrer";
+    $("#modalMedia").appendChild(img);
+
+    $("#modalBadges").replaceChildren();
+    [card.status, card.version].filter(Boolean).forEach((value) => {
+      const chip = document.createElement("span");
+      chip.className = "tag";
+      chip.textContent = String(value);
+      $("#modalBadges").appendChild(chip);
+    });
+
+    $("#modalGame").textContent = String(card.game || "Game");
+    $("#modalCategory").textContent = String(card.category || "Other");
+    $("#modalTitle").textContent = String(card.title || "Untitled");
+    $("#modalDescription").textContent = String(card.description || "");
+
+    $("#modalTags").replaceChildren();
+    (Array.isArray(card.tags) ? card.tags : []).forEach((tag) => {
+      const chip = document.createElement("span");
+      chip.className = "tag";
+      chip.textContent = String(tag);
+      $("#modalTags").appendChild(chip);
+    });
+
+    const url = safeExternal(card.redirect);
+    const get = $("#modalGet");
+    get.href = url || "#";
+    get.setAttribute("aria-disabled", url ? "false" : "true");
+
+    $("#modalCopy").onclick = async () => {
+      if (!url) return toast("No valid HTTPS link.");
+      try {
+        await navigator.clipboard.writeText(url);
+        toast("Link copied.");
+      } catch {
+        toast("Clipboard blocked.");
+      }
+    };
+
+    $("#modalCustomize").href = `admin.html?card=${encodeURIComponent(card.id)}`;
+  }
+
+  function closeModal() {
+    const modal = $("#modal");
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  async function copy(text, message) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(message);
+    } catch {
+      toast("Clipboard blocked.");
+    }
+  }
+
+  function startTyping() {
+    const target = $("#typingText");
+    if (!target) return;
+
+    const phrases = [
+      "Fresh scripts are landing.",
+      "New creator drops are here.",
+      "Browse the latest script cards.",
+      "Updated scripts, one clean hub.",
+      "Built for script creators.",
+      "New cards are ready to explore."
+    ];
+
+    let phraseIndex = Math.floor(Math.random() * phrases.length);
+    let charIndex = 0;
+    let deleting = false;
+    let pause = 0;
+
+    const tick = () => {
+      const phrase = phrases[phraseIndex];
+      if (pause > 0) {
+        pause -= 1;
+        setTimeout(tick, 90);
+        return;
+      }
+
+      if (!deleting) {
+        charIndex += 1;
+        target.textContent = phrase.slice(0, charIndex);
+        if (charIndex === phrase.length) {
+          pause = 16;
+          deleting = true;
+        }
+      } else {
+        charIndex -= 1;
+        target.textContent = phrase.slice(0, charIndex);
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          pause = 4;
+        }
+      }
+
+      setTimeout(tick, deleting ? 42 : 58);
+    };
+
+    tick();
+  }
+
+  async function load() {
+    document.title = cfg.SITE_TITLE || "Azuno | Script Hub";
+    $("#year").textContent = new Date().getFullYear();
+
+    try {
+      const response = await api("/api/catalog");
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.error || "Catalog unavailable.");
+
+      state.cards = Array.isArray(data.cards) ? data.cards : [];
+      state.cards.sort((a, b) => (Number(b.featured) || 0) - (Number(a.featured) || 0));
+
+      renderFilters();
+      renderCards();
+
+      $("#scriptCount").textContent = String(state.cards.length);
+      $("#categoryCount").textContent = String(new Set(state.cards.map((card) => card.category).filter(Boolean)).size);
+
+      const featured = state.cards[0];
+      if (featured) {
+        $("#featuredImage").src = imgSrc(featured.image);
+        $("#featuredGame").textContent = String(featured.game || "Game");
+        $("#featuredCategory").textContent = String(featured.category || "Script");
+        $("#featuredTitle").textContent = String(featured.title || "Untitled");
+        $("#featuredDescription").textContent = String(featured.description || "");
+        $("#featuredVersion").textContent = String(featured.version || "V1.0");
+        $("#featuredButton").onclick = () => openModal(featured);
+
+        const [start, end] = accentPair(featured.accent);
+        $("#featuredCard").style.setProperty("--accent-start", start);
+        $("#featuredCard").style.setProperty("--accent-end", end);
+      }
+    } catch (error) {
+      toast(error.message || "Could not load the catalog.");
+    }
+
+    attachTilt(document);
+    startTyping();
+  }
+
+  $("#searchInput").addEventListener("input", renderCards);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "/" && document.activeElement?.tagName !== "INPUT") {
+      event.preventDefault();
+      $("#searchInput").focus();
+    }
+    if (event.key === "Escape") closeModal();
+  });
+
+  document.querySelectorAll("[data-close]").forEach((element) => element.addEventListener("click", closeModal));
+
+  $("#headerCopyDiscord")?.addEventListener("click", () => copy(DISCORD, "Discord copied."));
+  $("#creatorDiscordButton")?.addEventListener("click", () => copy(DISCORD, "Discord copied."));
+
+  load();
 })();
