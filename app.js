@@ -56,64 +56,108 @@
   }
 
   function attachTilt(root = document) {
+    if (window.matchMedia && window.matchMedia("(hover: none)").matches) return;
+
     root.querySelectorAll(".tilt-card:not([data-tilt-ready])").forEach((card) => {
       card.dataset.tiltReady = "1";
-      let rect = null;
-      let raf = 0;
-      let targetX = 0;
-      let targetY = 0;
-      let targetMX = 50;
-      let targetMY = 50;
 
-      const paint = () => {
-        raf = 0;
-        const strength = Number(card.dataset.tiltStrength || 6);
-        const rx = -targetY * strength;
-        const ry = targetX * strength;
-        card.style.setProperty("--tilt-x", `${rx.toFixed(2)}deg`);
-        card.style.setProperty("--tilt-y", `${ry.toFixed(2)}deg`);
-        card.style.setProperty("--mx", `${targetMX.toFixed(2)}%`);
-        card.style.setProperty("--my", `${targetMY.toFixed(2)}%`);
+      const state = {
+        rect: null,
+        raf: 0,
+        active: false,
+        x: 0,
+        y: 0,
+        tx: 0,
+        ty: 0,
+        mx: 50,
+        my: 50,
+        tmX: 50,
+        tmY: 50,
+        strength: Number(card.dataset.tiltStrength || 6)
+      };
+
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+      const updateRect = () => {
+        state.rect = card.getBoundingClientRect();
+      };
+
+      const frame = () => {
+        state.raf = 0;
+
+        const ease = state.active ? 0.19 : 0.13;
+        state.x += (state.tx - state.x) * ease;
+        state.y += (state.ty - state.y) * ease;
+        state.mx += (state.tmX - state.mx) * 0.22;
+        state.my += (state.tmY - state.my) * 0.22;
+
+        const rx = -state.y * state.strength;
+        const ry = state.x * state.strength;
+
+        card.style.setProperty("--tilt-x", `${rx.toFixed(3)}deg`);
+        card.style.setProperty("--tilt-y", `${ry.toFixed(3)}deg`);
+        card.style.setProperty("--mx", `${state.mx.toFixed(2)}%`);
+        card.style.setProperty("--my", `${state.my.toFixed(2)}%`);
+
+        const settled =
+          Math.abs(state.x - state.tx) < 0.003 &&
+          Math.abs(state.y - state.ty) < 0.003 &&
+          Math.abs(state.mx - state.tmX) < 0.15 &&
+          Math.abs(state.my - state.tmY) < 0.15;
+
+        if (!settled || state.active) state.raf = requestAnimationFrame(frame);
       };
 
       const schedule = () => {
-        if (!raf) raf = requestAnimationFrame(paint);
+        if (!state.raf) state.raf = requestAnimationFrame(frame);
       };
 
-      card.addEventListener("pointerenter", (event) => {
+      const moveFromPointer = (event) => {
         if (event.pointerType === "touch") return;
-        rect = card.getBoundingClientRect();
-        card.classList.add("is-tilting");
-        card.style.setProperty("--mx", "50%");
-        card.style.setProperty("--my", "50%");
-      });
+        if (!state.rect) updateRect();
+        if (!state.rect || !state.rect.width || !state.rect.height) return;
 
-      card.addEventListener("pointermove", (event) => {
-        if (event.pointerType === "touch") return;
-        rect ||= card.getBoundingClientRect();
-        if (!rect.width || !rect.height) return;
-        targetX = Math.max(-0.5, Math.min(0.5, (event.clientX - rect.left) / rect.width - 0.5));
-        targetY = Math.max(-0.5, Math.min(0.5, (event.clientY - rect.top) / rect.height - 0.5));
-        targetMX = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
-        targetMY = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
+        const px = (event.clientX - state.rect.left) / state.rect.width;
+        const py = (event.clientY - state.rect.top) / state.rect.height;
+
+        state.tx = clamp(px - 0.5, -0.5, 0.5);
+        state.ty = clamp(py - 0.5, -0.5, 0.5);
+        state.tmX = clamp(px * 100, 0, 100);
+        state.tmY = clamp(py * 100, 0, 100);
         schedule();
-      });
-
-      const reset = () => {
-        targetX = 0;
-        targetY = 0;
-        targetMX = 50;
-        targetMY = 50;
-        card.classList.remove("is-tilting");
-        card.style.removeProperty("--tilt-x");
-        card.style.removeProperty("--tilt-y");
-        card.style.setProperty("--mx", "50%");
-        card.style.setProperty("--my", "50%");
-        rect = null;
       };
 
-      card.addEventListener("pointerleave", reset);
-      card.addEventListener("pointercancel", reset);
+      const enter = (event) => {
+        if (event.pointerType === "touch") return;
+        state.active = true;
+        updateRect();
+        card.classList.add("is-tilting");
+        moveFromPointer(event);
+      };
+
+      const leave = () => {
+        state.active = false;
+        state.tx = 0;
+        state.ty = 0;
+        state.tmX = 50;
+        state.tmY = 50;
+        schedule();
+        window.setTimeout(() => {
+          if (!state.active && Math.abs(state.x) < 0.01 && Math.abs(state.y) < 0.01) {
+            card.classList.remove("is-tilting");
+            card.style.setProperty("--mx", "50%");
+            card.style.setProperty("--my", "50%");
+          }
+        }, 220);
+      };
+
+      card.addEventListener("pointerenter", enter, { passive: true });
+      card.addEventListener("pointermove", moveFromPointer, { passive: true });
+      card.addEventListener("pointerleave", leave, { passive: true });
+      card.addEventListener("pointercancel", leave, { passive: true });
+      window.addEventListener("resize", updateRect, { passive: true });
+
+      updateRect();
     });
   }
 

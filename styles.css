@@ -163,15 +163,26 @@ svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   box-shadow:var(--shadow);
   transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;
 }
+.showcase-card::before,.script-card::before{
+  content:"";position:absolute;inset:-115%;pointer-events:none;z-index:3;
+  background:linear-gradient(135deg,transparent 42%,rgba(255,255,255,0) 46%,rgba(255,255,255,.055) 48.5%,rgba(255,255,255,.23) 50%,rgba(255,255,255,.045) 51.5%,rgba(255,255,255,0) 54%,transparent 58%);
+  transform:translate3d(56%,-56%,0) rotate(-32deg);
+  opacity:0;mix-blend-mode:screen;
+  filter:blur(1px);
+}
 .showcase-card::after,.script-card::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
   background:
-    radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.11),transparent 24%),
-    linear-gradient(135deg,transparent 36%,rgba(255,255,255,.06) 47%,rgba(255,255,255,.18) 50%,rgba(255,255,255,.035) 53%,transparent 65%);
-  opacity:.62;mix-blend-mode:screen;
+    radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.16),transparent 24%),
+    radial-gradient(circle at var(--mx) var(--my),color-mix(in srgb,var(--accent-start,#6b7cff) 14%,transparent),transparent 42%);
+  opacity:.72;mix-blend-mode:screen;transition:opacity .25s ease;
+}
+.showcase-card:hover::before,.script-card:hover::before,.showcase-card.is-tilting::before,.script-card.is-tilting::before{
+  opacity:1;
+  animation:glassSweep 4.8s cubic-bezier(.45,.05,.2,1) infinite;
 }
 .showcase-card:hover,.script-card:hover{
-  box-shadow:0 38px 110px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.04);
+  box-shadow:0 38px 110px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.045),0 18px 46px color-mix(in srgb,var(--accent-start,#6b7cff) 14%,transparent);
 }
 .showcase-media{height:330px;position:relative;overflow:hidden;background:#0c0f17}
 .showcase-media img,.modal-media img,.card-media img{width:100%;height:100%;object-fit:cover;display:block}
@@ -535,6 +546,12 @@ textarea{resize:vertical;min-height:104px}
 }
 
 /* motion and responsive */
+@keyframes glassSweep{
+  0%,12%{transform:translate3d(56%,-56%,0) rotate(-32deg)}
+  48%,60%{transform:translate3d(0,0,0) rotate(-32deg)}
+  100%{transform:translate3d(-56%,56%,0) rotate(-32deg)}
+}
+
 @keyframes sweep{
   0%{transform:rotate(33deg) translate(-55%,-15%)}
   44%,56%{transform:rotate(33deg) translate(12%,15%)}
@@ -667,20 +684,22 @@ body{overflow-x:clip}
   --tilt-y:0deg;
   --mx:50%;
   --my:50%;
-  transform:perspective(1100px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0,0,0);
+  --tilt-lift:0px;
+  --tilt-scale:1;
+  transform:perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0,var(--tilt-lift),0) scale(var(--tilt-scale));
   transform-origin:center center;
   backface-visibility:hidden;
   will-change:transform;
-  transition:transform .42s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;
+  transition:box-shadow .35s cubic-bezier(.2,.8,.2,1);
 }
 .tilt-card.is-tilting{
-  transform:perspective(1100px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0,-5px,0);
-  transition:transform .08s linear,box-shadow .25s ease;
+  --tilt-lift:-6px;
+  --tilt-scale:1.012;
 }
 .tilt-card::after{
   transition:opacity .25s ease;
 }
-.tilt-card:hover::after{opacity:.9}
+.tilt-card:hover::after{opacity:.96}
 
 .cards{align-items:stretch}
 .script-card{
@@ -757,7 +776,8 @@ body{overflow-x:clip}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .tilt-card,.tilt-card.is-tilting{transform:none!important}
+  .tilt-card::before{animation:none!important;opacity:.7}
+  .media-glare,.card-shine{animation-duration:9s}
 }
 
 .tilt-card{pointer-events:auto;touch-action:pan-y;}
