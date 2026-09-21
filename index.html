@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05060a">
+<meta name="description" content="AzuScripts — a premium, animated script hub.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self'; script-src 'self'; connect-src 'self' https:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>AzuScripts — Script Hub</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="ambient ambient-a"></div><div class="ambient ambient-b"></div><div class="grid"></div><div class="noise"></div>
+<header class="topbar shell">
+  <a class="brand" href="#top"><span class="brand-mark">AZ</span><span><b>AzuScripts</b><small>script hub</small></span></a>
+  <nav><a class="active" href="#scripts">Scripts</a><a href="#access">Access</a><a href="#about">About</a></nav>
+  <a class="header-btn" href="admin.html">Customize <span>↗</span></a>
+</header>
+<main id="top">
+<section class="hero shell">
+  <div class="hero-copy reveal">
+    <div class="eyebrow"><i></i> LIVE LIBRARY · EDGE PROTECTED</div>
+    <h1>Scripts with<br><span>real presence.</span></h1>
+    <p>A fast, animated hub for your scripts. Glass cards, cursor depth, custom gradients, tags and secure creator controls.</p>
+    <div class="actions"><a class="button primary" href="#scripts">Explore scripts <b>↘</b></a><a class="button ghost" href="admin.html">Open builder <b>✦</b></a></div>
+    <div class="stats"><div><strong id="scriptCount">—</strong><span>scripts</span></div><div><strong id="categoryCount">—</strong><span>categories</span></div><div><strong>API</strong><span>protected writes</span></div></div>
+  </div>
+  <div class="hero-preview reveal delay-1">
+    <article id="featuredCard" class="showcase-card tilt-card" data-tilt-strength="8">
+      <div class="showcase-media"><img id="featuredImage" alt="Featured script"><div class="media-glare"></div><div class="floating-badge">FEATURED</div></div>
+      <div class="showcase-body"><div id="featuredGame" class="meta">LOADING</div><h2 id="featuredTitle">Loading…</h2><p id="featuredDescription">Fetching your live catalog.</p><div class="showcase-foot"><span id="featuredVersion">—</span><button id="featuredButton" class="inline-btn">View card →</button></div></div>
+    </article>
+  </div>
+</section>
+<section id="scripts" class="shell library">
+  <div class="section-heading"><div><div class="eyebrow">THE LIBRARY</div><h2>Pick a script.</h2></div><span id="resultCount">0 results</span></div>
+  <div class="controls"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search games, features, tags…" autocomplete="off"><kbd>/</kbd></label><div id="filters" class="filters"></div></div>
+  <div id="cards" class="cards" aria-live="polite"></div>
+  <div id="emptyState" class="empty glass-panel hidden"><strong>Nothing here yet.</strong><span>Try another search or category.</span></div>
+</section>
+<section id="access" class="shell section-space">
+  <div class="glass-panel access-panel reveal">
+    <div><div class="eyebrow">DEVICE ACCESS</div><h2>Request creator access.</h2><p>A normal browser cannot read a real Windows machine HWID. Use the included PowerShell helper, then send the copied HWID to the hub owner. The API can independently read your public IP at the edge.</p></div>
+    <div class="access-actions"><button id="copyIp" class="button primary">Copy your IP</button><button id="copyHwidCommand" class="button ghost">Copy HWID command</button><a class="button ghost" href="get-hwid.ps1" download>Download HWID helper</a><button id="copyApi" class="button ghost">Copy API URL</button></div><div class="hwid-copy-row"><input id="hwidPaste" maxlength="64" placeholder="Paste the 64-character HWID here"><button id="copyHwid" class="button ghost">Copy your HWID</button></div>
+    <div id="accessStatus" class="small-status">Checking API…</div>
+  </div>
+</section>
+<section id="about" class="shell section-space">
+  <div class="glass-panel about-panel"><div><div class="eyebrow">BUILT FOR CREATORS</div><h2>Not another<br><span>link tree.</span></h2></div><p>Public catalog data comes from the backend database. Protected actions are validated server-side, including roles, ownership, device authorization and daily creator limits.</p><a class="button ghost" href="admin.html">Customize a card →</a></div>
+</section>
+</main>
+<footer class="footer shell"><span>© <span id="year"></span> AzuScripts</span><span>Animated glass UI · secure API</span></footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="modal" class="modal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="modal-panel" role="dialog" aria-modal="true"><button class="icon-btn close" data-close aria-label="Close">×</button><div id="modalMedia" class="modal-media"></div><div class="modal-body"><div id="modalBadges" class="badge-row"></div><div id="modalGame" class="meta"></div><h2 id="modalTitle"></h2><p id="modalDescription"></p><div id="modalTags" class="tags"></div><div class="modal-actions"><a id="modalGet" class="button primary" target="_blank" rel="noopener noreferrer">Get script ↗</a><button id="modalCopy" class="button ghost">Copy link</button><a id="modalCustomize" class="button ghost">Customize card ✦</a></div></div></div></div>
+<script src="site-config.js"></script><script src="app.js"></script>
+</body></html>
